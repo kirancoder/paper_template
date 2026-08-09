@@ -1,0 +1,28 @@
+# Quarto
+.quarto/
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Generated PDFs
+*.pdf
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
