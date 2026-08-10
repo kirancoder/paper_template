@@ -1,0 +1,64 @@
+---
+title: "Reusable Academic Paper Template"
+subtitle: "A Quarto Template with Numbered Citations"
+author:
+  - name: Kiran M Aralikatti
+abstract: |
+  This reusable Quarto template demonstrates a clean academic manuscript structure with automatic numbered citations, numbered bibliography entries, cross-references, equations, figures, and tables. Citations are written with standard Pandoc syntax, for example `[@einstein1905]`, while the rendered PDF displays numeric square-bracket citations.
+keywords:
+  - Quarto
+  - academic writing
+  - numbered citations
+  - reproducible research
+bibliography: references.bib
+format:
+  elsevier-pdf:
+    keep-tex: true
+    number-sections: true
+    colorlinks: true
+    journal:
+      name: "Template Journal"
+      formatting: preprint
+      cite-style: number
+---
+
+# Introduction {#sec-introduction}
+
+This document is a reusable academic Quarto template. It preserves the useful journal-style PDF functionality from the existing local Quarto extension while removing tutorial filler text.
+
+Single citations use normal Pandoc syntax, as in [@einstein1905]. A second citation appears independently as [@shannon1948]. Multiple citations are also written normally, for example [@einstein1905; @shannon1948; @knuth1984]. The citation numbers and bibliography numbering are generated automatically during rendering.
+
+Section references use Quarto cross-references. For example, @sec-methods introduces the reproducible methods pattern used by this template.
+
+# Methods {#sec-methods}
+
+Mathematical statements can be numbered and referenced. The mass-energy relation in @eq-energy is included as a compact example.
+
+$$
+E = mc^2
+$$ {#eq-energy}
+
+Additional inline mathematics can be written as $\alpha + \beta = \gamma$ without affecting equation numbering.
+
+# Results {#sec-results}
+
+Figures can be included with standard Markdown image syntax and a Quarto label. @fig-placeholder shows a placeholder figure that can be replaced with project-specific artwork.
+
+![Placeholder figure for the reusable paper template.](placeholder.png){#fig-placeholder width="55%"}
+
+Tables can be written directly in Markdown. @tbl-example reports a small example dataset.
+
+| Method | Accuracy | Runtime (s) |
+|:-------|---------:|------------:|
+| Baseline | 0.82 | 12.4 |
+| Proposed | 0.91 | 10.8 |
+
+: Example table with an automatically numbered caption. {#tbl-example}
+
+# Discussion {#sec-discussion}
+
+The document demonstrates references to @sec-introduction, @eq-energy, @fig-placeholder, and @tbl-example. The source remains editable as a normal `.qmd` manuscript, while Quarto and Pandoc handle numbering, citations, and bibliography generation.
+
+This final sentence cites a fourth source [@lamport1994] so that the bibliography demonstrates multiple automatically numbered entries.
+
+# References
