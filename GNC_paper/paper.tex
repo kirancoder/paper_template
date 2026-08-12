@@ -8,6 +8,7 @@
   number,
   preprint]{elsarticle}
 \usepackage{xcolor}
+\usepackage[margin=0.75in]{geometry}
 \usepackage{amsmath,amssymb}
 \setcounter{secnumdepth}{5}
 \usepackage{iftex}
@@ -154,10 +155,8 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Reusable Academic Paper Template},
+  pdftitle={GNC Assignment: Solution Approach},
   pdfauthor={Kiran M Aralikatti},
-  pdfkeywords={Quarto, academic writing, numbered
-citations, reproducible research},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -170,8 +169,8 @@ citations, reproducible research},
 \begin{document}
 
 \begin{frontmatter}
-\title{Reusable Academic Paper Template \\\large{A Quarto Template with
-Numbered Citations} }
+\title{GNC Assignment: Solution Approach \\\large{Bellatrix Aerospace
+Pvt. Ltd} }
 \author[]{Kiran M Aralikatti%
 %
 }
@@ -181,103 +180,211 @@ Numbered Citations} }
 
 
         
-\begin{abstract}
-This reusable Quarto template demonstrates a clean academic manuscript
-structure with automatic numbered citations, numbered bibliography
-entries, cross-references, equations, figures, and tables. Citations are
-written with standard Pandoc syntax, for example
-\texttt{{[}@einstein1905{]}}, while the rendered PDF displays numeric
-square-bracket citations.
-\end{abstract}
 
 
 
 
 
-\begin{keyword}
-    Quarto \sep academic writing \sep numbered citations \sep 
-    reproducible research
-\end{keyword}
 \end{frontmatter}
     
 
 \section{Introduction}\label{sec-introduction}
 
-This document is a reusable academic Quarto template. It preserves the
-useful journal-style PDF functionality from the existing local Quarto
-extension while removing tutorial filler text.
+The document contains the various solution methods for the GNC
+assignment problems. The given problems can be solved using more then
+one method, which author tried to implement. The document generated
+using \href{https://quarto.org/docs/journals/}{Quarto} locally, created
+by the author. The source remains editable as a normal \texttt{.qmd}
+manuscript and the template can be found
+\href{https://github.com/kirancoder/paper_template/tree/main/sample_paper}{here}.
 
-Single citations use normal Pandoc syntax, as in \citep{einstein1905}. A
-second citation appears independently as \citep{shannon1948}. Multiple
-citations are also written normally, for example
-\citep{einstein1905, shannon1948, knuth1984}. The citation numbers and
-bibliography numbering are generated automatically during rendering.
+\section{Task 1}\label{sec-task1}
 
-Section references use Quarto cross-references. For example,
-Section~\ref{sec-methods} introduces the reproducible methods pattern
-used by this template.
+This is a very intersting geometery problem, which can solved using
+trignometric relations to a triangles in a minor sector and also
+converting the problem in polar co-ordinates.
 
-\section{Methods}\label{sec-methods}
+The 1st and formost the cone has to opened and converted into a sector
+of a circle, for a given right circular cone in the problem, it will
+always be a minor sector of a circle. For both the methods, minor sector
+will be used to find the downhill distance.
 
-Mathematical statements can be numbered and referenced. The mass-energy
-relation in Equation~\ref{eq-energy} is included as a compact example.
+The 2nd catch is, when the cone is opened, the curve connecting point A
+and B will be stright line, which is the shortest distance between two
+points.
 
-\begin{equation}\protect\phantomsection\label{eq-energy}{
-E = mc^2
-}\end{equation}
+The below image shows the above discussed points, where the cone is
+opened and the curve connecting A and B is stright line.
 
-Additional inline mathematics can be written as
-\(\alpha + \beta = \gamma\) without affecting equation numbering.
+\begin{figure}[H]
 
-\section{Results}\label{sec-results}
-
-Figures can be included with standard Markdown image syntax and a Quarto
-label. Figure~\ref{fig-placeholder} shows a placeholder figure that can
-be replaced with project-specific artwork.
-
-\begin{figure}
+\begin{minipage}[t]{0.50\linewidth}
 
 \centering{
 
-\includegraphics[width=0.55\linewidth,height=\textheight,keepaspectratio]{placeholder.png}
+\pandocbounded{\includegraphics[keepaspectratio]{images/GNC_img_1.png}}
 
 }
 
-\caption{\label{fig-placeholder}Placeholder figure for the reusable
-paper template.}
+\subcaption{\label{fig-given-cone}}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/GNC_img_2.png}}
+
+}
+
+\subcaption{\label{fig-opened-cone}}
+
+\end{minipage}%
+
+\caption{\label{fig-cone}Given cone and its corresponding sector
+representation.}
 
 \end{figure}%
 
-Tables can be written directly in Markdown. Table~\ref{tbl-example}
-reports a small example dataset.
+\subsection{Solution 1}\label{sec-task1-sol1}
 
-\begin{longtable}[]{@{}lrr@{}}
-\caption{Example table with an automatically numbered
-caption.}\label{tbl-example}\tabularnewline
-\toprule\noalign{}
-Method & Accuracy & Runtime (s) \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-Method & Accuracy & Runtime (s) \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Baseline & 0.82 & 12.4 \\
-Proposed & 0.91 & 10.8 \\
-\end{longtable}
+In the given Figure~\ref{fig-opened-cone}, shows that the lengths of the
+given cone ``p, q, r'' relation to the various lenths of the minor
+sector.
 
-\section{Discussion}\label{sec-discussion}
+Considering the person is going from the point A to B, the downhill
+distance will lie on the somewhere on the line connecting A and B. The
+distance can be calculated using trignometric relations to the triangle
+\(\Delta \;ABO\) formed in the minor sector \(OAA'\).
 
-The document demonstrates references to Section~\ref{sec-introduction},
-Equation~\ref{eq-energy}, Figure~\ref{fig-placeholder}, and
-Table~\ref{tbl-example}. The source remains editable as a normal
-\texttt{.qmd} manuscript, while Quarto and Pandoc handle numbering,
-citations, and bibliography generation.
+To define the uphill while moving on the line AB, one can imgaine moving
+closer to the point O, i.e.~and then moving away from the point O, until
+reaching the point B. The divide the line segement AB into two parts,
+uphill and downhill, we a need a point of AB, which lies close to the
+point O, this can be found by draiwing a perpendicular from the point O
+to the line AB, which will intersect at a point D. The point D will be
+the closest point to O on the line AB, and hence the point D will be the
+point where the uphill ends and downhill starts.
 
-This final sentence cites a fourth source \citep{lamport1994} so that
-the bibliography demonstrates multiple automatically numbered entries.
+The below image will show the point D in the \(\Delta \;ABO\) triangle,
+which is the closest point to O on the line AB.
+
+\begin{figure}[H]
+
+\begin{minipage}[t]{\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/GNC_img_3.png}}
+
+\end{minipage}%
+
+\caption{\label{fig-cone}Representation of the uphill and downhill
+paths.}
+
+\end{figure}%
+
+So the task is now to find the distance DB, as the function of the given
+lengths p, q and r.
+
+The \(\Delta \; ABO\) the \(\angle\; \theta\), is common between the
+\(\Delta \; ABO\) and the sector. By the realtion between the angle and
+arc in circle,
+\begin{equation}\protect\phantomsection\label{eq-r_theta}{
+\theta = \frac{l}{r}
+}\end{equation}
+
+where \(l = \overset{\frown}{AB}\) and \(r\) is radius and \(\theta\) is
+angle suspended by the sector.
+
+The lengths \(q\) which is the radius of the cone, the permeter of the
+sector can derivied from that,
+\begin{equation}\protect\phantomsection\label{eq-cone}{
+\overset{\frown}{AB} = 2\, \pi \, q
+}\end{equation}
+
+Now, substiting arc length relation into Equation~\ref{eq-r_theta},
+
+\[
+\theta = \frac{2\, \pi \, q}{r}
+\]
+
+Hence, \(\theta  = f(q,r)\).
+
+Now, in \(\Delta AOB\), and \(\theta\) and two sides (\(OA = r\) \&
+\(OB = r - p\)) known in terms of the known quantites, so we can now
+apply \(cosine\) rule to find the third side, \(AB\) in terms of given
+parameters \(p, \; q \& r\)
+
+\begin{equation}\protect\phantomsection\label{eq-cosine}{
+{AB}^2 = {OA}^2 + {OB}^2 - 2 \cdot OA \cdot OB \; cos(\theta) = r^2+(r-p)^2-2r(r-p)\cos\theta
+}\end{equation}
+
+Consider \(AB = k\)
+
+\[
+k = \sqrt{r^2+(r-p)^2-2r(r-p)\cos\theta}
+\]
+
+Now, for the \(\Delta AOD\) and \(\Delta DOB\) are right angle
+triangles, the side \(OD\):
+\begin{equation}\protect\phantomsection\label{eq-tri-rel}{
+\begin{aligned}
+OD^2 = OA^2 - AD^2 \quad \text{in } \Delta AOD \\
+OD^2 = OB^2 - BD^2 \quad \text{in } \Delta DOB
+\end{aligned}
+}\end{equation}
+
+For simiplification consider \(AD = m \; \text{and} \; DB = n\) which is
+line \(AB\) defined above, then from Equation~\ref{eq-tri-rel} \[
+r^2 - m^2 = (r-p)^2 - n^2
+\]
+
+here \(m\) is uphill distance and \(n\) is downhill distance and
+simplifying the above solution gives,
+\begin{equation}\protect\phantomsection\label{eq-main}{
+\begin{aligned}
+m^2 - n^2 = r^2 - (r-p)^2 \\
+(m+n)(m-n) = r^2 - (r-p)^2
+\end{aligned}
+}\end{equation}
+
+then,
+
+\begin{equation}\protect\phantomsection\label{eq-main-2}{
+m-n = \frac{r^2 - (r-p)^2}{m+n} = \frac{r^2 - (r-p)^2}{k} 
+}\end{equation}
+
+and from the relations of \(k, m \; \text{and} \; n\),
+\begin{equation}\protect\phantomsection\label{eq-main-1}{
+m + n = k
+}\end{equation}
+
+Now, substract Equation~\ref{eq-main-2} from Equation~\ref{eq-main-1}
+gives
+
+\[
+\begin{aligned}
+2n = \frac{k^2 - r^2 + (r-p)^2}{k}
+\end{aligned}
+\]
+
+Substitute the value of \(k\) and simplify,
+
+\[
+\begin{aligned}
+n = \frac{(r-p)^2 - r(r-p) cos(\theta)}{\sqrt{r^2+(r-p)^2-2r(r-p)\cos\theta}}
+\end{aligned}
+\]
+
+So, the downhill distance (\(n\)), is the function
+\(p, q, \text{and} r\) as \(\theta\) is also function of
+\(p, q, \; \text{and} \; r\)
+
+\[
+n = g(p, q, r)
+\]
+
+\pagebreak
 
 
 \renewcommand\refname{References}
