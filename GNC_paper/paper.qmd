@@ -158,13 +158,16 @@ $$
 n = g(p, q, r)
 $$
 
+This can also be solved using polar co-oridnates ($r \text{and} \; \theta$) and minimum distance and other required relations formed in that form.  
 
 
 \pagebreak 
 
 # Task 2 {#sec-task2}
 
-This task is about the parameters estimation of the spring-mass-damper system which has the 
+This task is about the parameters estimation of the spring-mass-damper system, for the given mass and velocity data. This can be posed as a optimization problem, such that design varibles are damping and spring coefficients and the obejective function as $\Delta V$, i.e. the difference between simulation and given data, with the constraints as $2^{nd}$ order dynamics of the system
+
+
 
 
 
