@@ -165,7 +165,15 @@ This can also be solved using polar co-oridnates ($r \text{and} \; \theta$) and 
 
 # Task 2 {#sec-task2}
 
-This task is about the parameters estimation of the spring-mass-damper system, for the given mass and velocity data. This can be posed as a optimization problem, such that design varibles are damping and spring coefficients and the obejective function as $\Delta V$, i.e. the difference between simulation and given data, with the constraints as $2^{nd}$ order dynamics of the system
+This task is about the parameters estimation of the spring-mass-damper system, for the given mass and velocity data. This can be posed as a optimization problem, such that design varibles are damping and spring coefficients and the obejective function as $\Delta V$, i.e. the difference between simulation and given data, with the constraints as $2^{nd}$ order dynamics of the system.
+
+## Solution Method
+
+As per the problem statement, the same spring is used i.e. which expands the same length which is $0.15 \; m$ every time.
+
+Let's consider the states of the system, position and velocity at $t_0$, which are $[-0.15, 0.0]$. The positon is initially just because at final time, the body is experiences only spring force $F(t_f) = kx =0$, as $k$ can't be zero, we conclude that $x(t_f)=0$.
+
+The final conditions are, $[0.0, v_{data}]$.
 
 
 
