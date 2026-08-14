@@ -171,12 +171,21 @@ This task is about the parameters estimation of the spring-mass-damper system, f
 
 As per the problem statement, the same spring is used i.e. which expands the same length which is $0.15 \; m$ every time.
 
-Let's consider the states of the system, position and velocity at $t_0$, which are $[-0.15, 0.0]$. The positon is initially just because at final time, the body is experiences only spring force $F(t_f) = kx =0$, as $k$ can't be zero, we conclude that $x(t_f)=0$.
+Let's consider the states of the system, position and velocity at $t_0$, which are $[-0.15, 0.0]$. The positon is initially taken as negative, because at final time the body is experiences only spring force $F(t_f) = kx =0$, as $k$ can't be zero, we conclude that $x(t_f)=0$.
 
-The final conditions are, $[0.0, v_{data}]$.
+The final states are, $[0.0, v_{data}]$.
 
+In a proper form:
+$$\dot{x_1} = x_2$$
+$$\dot{x_2} = -\frac{c}{m} x_2 - \frac{k}{m} x_1$$
 
+Initial Conditions:
+$$x_1(t_0) = -0.15$$
+$$x_2(t_0) = 0.0$$
 
+Final Conditions:
+$$x_1(t_f) = 0.0$$
+$$x_2(t_f) = data$$
 
 
 \pagebreak
