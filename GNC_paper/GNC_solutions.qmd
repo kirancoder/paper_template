@@ -279,7 +279,7 @@ $$
 with the non-linear constriants as the dynamics model of the system given in the @eq-x1 and @eq-x2, with the boundary constrains @eq-bc-x1, @eq-bc-x2, @eq-bc1-x1 and @eq-bc1-x2. 
 
 
-This can be solved using different methods to find global optimal solution, but as per the authors best of knowledge, evoluctionary algorithums are prefered for the parameters estimation. In this case, @storn1997differential, simple and first strategy, *𝐷𝐸∕𝑟𝑎𝑛𝑑∕1* is implemented in this with the hyperparameters given below:
+This can be solved using different methods to find global optimal solution, but as per the authors best of knowledge, evoluctionary algorithums are prefered for the parameters estimation. In this case, @storn1997differential, simple and first strategy, $DE / \text{rand} / 1$ is implemented in this with the hyperparameters given below:
 
 | Parameter | Symbol | Value | Description |
 |:----------|:------:|------:|:------------|
@@ -335,8 +335,9 @@ Estimated Damping Coefficient b : 0.000020 Ns/m
 ```
 From the above results, it can be seen that the estimated damping coefficent is almost zero, $b = 0.000020\ \mathrm{Ns/m}$. This shows that the damping effect in the system is very small and can be neglected. Hence, the system mainly behaves like a spring-mass system, with the estimated spring constant of $k = 360.220434\ \mathrm{N/m}$. The simulated results obtained from these parameters are compared with the given data in @fig-mass-vel.
 
+> Note: The optimized vriables and coast may differ at the runtime as it depends on the *rand* function, but $k$ will remain close to $360.0$ and the $b$ will remain close to $0$. 
 
-The objective function can be even reduced by running it for more generation or the adding the tolerenace limit on the objective function. The author belives that, it will lead to the cost function to zero and the $k = 360 \; and b = 0.0$. 
+The objective function can be even reduced by running it for more generation or the adding the tolerenace limit on the objective function. The author belives that, it will lead to the cost function to zero and the $k = 360 \; and \; b = 0.0$. 
 
 
 
