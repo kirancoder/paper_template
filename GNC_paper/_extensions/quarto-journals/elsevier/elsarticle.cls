@@ -811,7 +811,7 @@
    \hrule\vskip12pt
    \ifvoid\absbox\else\unvbox\absbox\par\vskip10pt\fi
    \ifvoid\keybox\else\unvbox\keybox\par\vskip10pt\fi
-   \hrule\vskip12pt
+  %  \hrule\vskip12pt
    \ifx\@elsarticlenewpageafter\newpage@after@abstract% %*%
      \newpage
    \fi%

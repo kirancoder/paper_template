@@ -8,7 +8,7 @@
   number,
   preprint]{elsarticle}
 \usepackage{xcolor}
-\usepackage[margin=0.75in]{geometry}
+\usepackage[margin=0.55in]{geometry}
 \usepackage{amsmath,amssymb}
 \setcounter{secnumdepth}{5}
 \usepackage{iftex}
@@ -65,6 +65,46 @@
 \fi
 \makeatother
 
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \usepackage{longtable,booktabs,array}
 \newcounter{none} % for unnumbered tables
@@ -109,6 +149,8 @@
 \bibliographystyle{elsarticle-num}
 
 
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -383,6 +425,269 @@ So, the downhill distance (\(n\)), is the function
 \[
 n = g(p, q, r)
 \]
+
+This can also be solved using polar co-oridnates
+(\(r \; \text{and} \; \theta\)) and minimum distance and other required
+relations formed in that form.
+
+\pagebreak
+
+\section{Task 2}\label{sec-task2}
+
+This task is about the parameters estimation of the spring-mass-damper
+system, for the given mass and velocity data. This can be posed as a
+optimization problem, such that design varibles are damping and spring
+coefficients and the obejective function as \(\Delta V\), i.e.~the
+difference between simulation and given data, with the constraints as
+\(2^{nd}\) order dynamics of the system.
+
+\subsection{Solution Method}\label{solution-method}
+
+As per the problem statement, the same spring is used i.e.~which expands
+the same length which is \(0.15 \; m\) every time.
+
+Let's consider the states of the system, position and velocity at
+\(t_0\), which are \([-0.15, 0.0]\). The positon is initially taken as
+negative, because at final time the body is experiences only zero spring
+force \(F(t_f) = kx =0\), as \(k\) can't be zero, we conclude that
+\(x(t_f)=0\).
+
+The final states are, \([0.0, v_{data}]\).
+
+\begin{equation}\protect\phantomsection\label{eq-x1}{
+\dot{x}_1 = x_2
+}\end{equation}
+
+\begin{equation}\protect\phantomsection\label{eq-x2}{
+\dot{x}_2 = -\frac{b}{m}x_2 - \frac{k}{m}x_1
+}\end{equation}
+
+Initial Conditions:
+
+\begin{equation}\protect\phantomsection\label{eq-bc-x1}{
+x_1(t_0) = -0.15
+}\end{equation}
+
+\begin{equation}\protect\phantomsection\label{eq-bc-x2}{
+x_2(t_0) = 0.0
+}\end{equation}
+
+Final Conditions:
+
+\begin{equation}\protect\phantomsection\label{eq-bc1-x1}{
+x_1(t_f) = 0.0
+}\end{equation}
+
+\begin{equation}\protect\phantomsection\label{eq-bc1-x2}{
+x_2(t_f) = \mathrm{data}
+}\end{equation}
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.2cm and 0.55cm,
+    scale=1.0,
+    transform shape,
+    startstop/.style={
+        rectangle,
+        rounded corners,
+        minimum width=2.2cm,
+        minimum height=0.9cm,
+        text centered,
+        draw=black,
+        fill=gray!15,
+        font=\bfseries
+    },
+    process/.style={
+        rectangle,
+        minimum width=3.25cm,
+        minimum height=1.0cm,
+        text centered,
+        text width=3.25cm,
+        draw=black,
+        fill=blue!10
+    },
+    decision/.style={
+        diamond,
+        aspect=1.8,
+        minimum width=2.7cm,
+        minimum height=1.1cm,
+        text centered,
+        text width=2.7cm,
+        draw=black,
+        fill=yellow!20,
+        inner sep=0pt
+    },
+    arrow/.style={
+        thick,
+        ->,
+        >=stealth
+    }
+]
+% TOP ROW
+\node (start) [startstop] {Start};
+\node (init) [process, right=of start] {1. Load Data \\ \& Set $(k_0,b_0)$};
+\node (opt) [process, right=of init] {2. Proposal \\ Candidate $(k,b)$};
+\node (sim) [process, right=of opt] {3. Physics Sim \\ Solve ODE};
+% BOTTOM ROW
+\node (cost) [process, below=1.4cm of sim] {4. Cost Eval \\ Calculate $SSE$};
+\node (check) [decision, below=1.4cm of opt] {Converged? \\ ($SSE < \mathrm{Tol}$)};
+\node (out) [process, below=1.4cm of init] {5. Display Optimal \\ $(k,b)$ \& Plot};
+\node (stop) [startstop, below=1.4cm of start] {End};
+% TOP ROW ARROWS
+\draw [arrow] (start.east) -- (init.west);
+\draw [arrow] (init.east) -- (opt.west);
+\draw [arrow] (opt.east) -- (sim.west);
+% SIMULATION TO COST
+\draw [arrow] (sim.south) -- (cost.north);
+% BOTTOM ROW ARROWS
+\draw [arrow] (cost.west) -- (check.east);
+\draw [arrow] (check.west) -- node[above, xshift=0.25cm, font=\small\bfseries] {Yes} (out.east);
+\draw [arrow] (out.west) -- (stop.east);
+% FEEDBACK ARROW
+\draw [arrow] (check.north) -- node[right, font=\small\bfseries] {No (Update $k,b$)} (opt.south);
+\end{tikzpicture}
+\end{center}
+
+Below, the proper optimization problem is formulated:
+
+\[
+J(k, b) = \sum_{i=1}^{N} (v_{sim, i}(m_i, k, b) - v_{data, i})^2
+\]
+
+with the non-linear constriants as the dynamics model of the system
+given in the Equation~\ref{eq-x1} and Equation~\ref{eq-x2}, with the
+boundary constrains Equation~\ref{eq-bc-x1}, Equation~\ref{eq-bc-x2},
+Equation~\ref{eq-bc1-x1} and Equation~\ref{eq-bc1-x2}.
+
+This can be solved using different methods to find global optimal
+solution, but as per the authors best of knowledge, evoluctionary
+algorithums are prefered for the parameters estimation. In this case,
+\citep{storn1997differential}, simple and first strategy,
+\emph{𝐷𝐸∕𝑟𝑎𝑛𝑑∕1} is implemented in this with the hyperparameters given
+below:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2821}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2051}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1795}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3333}}@{}}
+\caption{Differential Evolution
+hyperparameters.}\label{tbl-de-hyperparameters}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Parameter
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Symbol
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Parameter
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Symbol
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Population size & (NP) & 10 & Number of individuals in the population \\
+Maximum generations & (MaxGen) & 50 & Number of generations \\
+Mutation factor & (F) & 0.8 & Differential weight \\
+Crossover rate & (CR) & 0.9 & Probability of crossover \\
+Number of parameters & (D) & 2 & Number of optimization parameters \\
+\end{longtable}
+
+The optimization parameters \(k\) and \(b\), the lower and upper bounds
+are defined as
+
+\begin{equation}\protect\phantomsection\label{eq-parameter-bounds}{
+\begin{aligned}
+10 &\leq k \leq 1000,\\
+0 &\leq b \leq 50.
+\end{aligned}
+}\end{equation}
+
+A simple \emph{RK4} integrater is built to integrate the both the
+equations simulationally, from the given initial state to the final
+condition, \(x_2(t_f) = 0.0\), but it was observed that, for few
+combinations of the \(k\) and \(b\) takes the longer time, mainly due to
+higher \(b\), took too long to resolve or never reached separation.
+
+TO fix this, author added the maximum limit of the \(t_f = 10s\), which
+is added in the \emph{RK4} loop such that If the simulation successfully
+reaches \(x_1(t_f) \ge 0\) within this limit, it sets a success flag to
+True and outputs the final velocity \(x_2(t_f)\), if it hits the time
+limit without separating, it sets the success flag to False and outputs
+\(x_2(t_f) = \text{NaN}\), which penalizes that candidate in the
+optimizer.
+
+\begin{figure}[H]
+
+\begin{minipage}[t]{\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/GNC_img_4.png}}
+
+\end{minipage}%
+
+\caption{\label{fig-mass-vel}Mass vs Veclocity: Simulated Curve and
+Given data}
+
+\end{figure}%
+
+The MATLAB output is given below:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Generation 46/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000}
+\NormalTok{Generation 47/50 started...}
+\NormalTok{Generation 47/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000}
+\NormalTok{Generation 48/50 started...}
+\NormalTok{Generation 48/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000}
+\NormalTok{Generation 49/50 started...}
+\NormalTok{Generation 49/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000}
+\NormalTok{Generation 50/50 started...}
+\NormalTok{Generation 50/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000}
+
+\NormalTok{ DE Optimization Complete}
+\NormalTok{Best Cost                    : 0.0034241292}
+\NormalTok{Estimated Spring Constant k  : 360.220434 N/m}
+\NormalTok{Estimated Damping Coefficient b : 0.000020 Ns/m}
+\end{Highlighting}
+\end{Shaded}
+
+From the above results, it can be seen that the estimated damping
+coefficent is almost zero, \(b = 0.000020\ \mathrm{Ns/m}\). This shows
+that the damping effect in the system is very small and can be
+neglected. Hence, the system mainly behaves like a spring-mass system,
+with the estimated spring constant of \(k = 360.220434\ \mathrm{N/m}\).
+The simulated results obtained from these parameters are compared with
+the given data in Figure~\ref{fig-mass-vel}.
+
+The objective function can be even reduced by running it for more
+generation or the adding the tolerenace limit on the objective function.
+The author belives that, it will lead to the cost function to zero and
+the \(k = 360 \; and b = 0.0\).
+
+\begin{figure}[H]
+
+\begin{minipage}[t]{\linewidth}
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/GNC_img_5.png}}
+
+\end{minipage}%
+
+\caption{\label{fig-obj-kb}Generation vs Coast, k and b}
+
+\end{figure}%
 
 \pagebreak
 

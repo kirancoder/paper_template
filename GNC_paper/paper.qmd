@@ -3,25 +3,24 @@ title: "GNC Assignment: Solution Approach"
 subtitle: "Bellatrix Aerospace Pvt. Ltd"
 author:
   - name: Kiran M Aralikatti
-# abstract: |
-#   This reusable Quarto template demonstrates a clean academic manuscript structure with automatic numbered citations, numbered bibliography entries, cross-references, equations, figures, and tables. Citations are written with standard Pandoc syntax, for example `[@einstein1905]`, while the rendered PDF displays numeric square-bracket citations.
-# keywords:
-#   - Quarto
-#   - academic writing
-#   - numbered citations
-#   - reproducible research
+
 bibliography: references.bib
+colorlinks: true
 format:
   elsevier-pdf:
     keep-tex: true
     number-sections: true
     colorlinks: true
     geometry:
-      - margin=0.75in
+      - margin=0.55in
     journal:
       name: "Template Journal"
       formatting: preprint
       cite-style: number
+
+header-includes:
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
 ---
 
 # Introduction {#sec-introduction}
@@ -158,7 +157,7 @@ $$
 n = g(p, q, r)
 $$
 
-This can also be solved using polar co-oridnates ($r \text{and} \; \theta$) and minimum distance and other required relations formed in that form.  
+This can also be solved using polar co-oridnates ($r \; \text{and} \; \theta$) and minimum distance and other required relations formed in that form.  
 
 
 \pagebreak 
@@ -171,23 +170,188 @@ This task is about the parameters estimation of the spring-mass-damper system, f
 
 As per the problem statement, the same spring is used i.e. which expands the same length which is $0.15 \; m$ every time.
 
-Let's consider the states of the system, position and velocity at $t_0$, which are $[-0.15, 0.0]$. The positon is initially taken as negative, because at final time the body is experiences only spring force $F(t_f) = kx =0$, as $k$ can't be zero, we conclude that $x(t_f)=0$.
+Let's consider the states of the system, position and velocity at $t_0$, which are $[-0.15, 0.0]$. The positon is initially taken as negative, because at final time the body is experiences only zero spring force $F(t_f) = kx =0$, as $k$ can't be zero, we conclude that $x(t_f)=0$.
 
 The final states are, $[0.0, v_{data}]$.
 
-In a proper form:
-$$\dot{x_1} = x_2$$
-$$\dot{x_2} = -\frac{c}{m} x_2 - \frac{k}{m} x_1$$
+$$
+\dot{x}_1 = x_2
+$$ {#eq-x1}
+
+$$
+\dot{x}_2 = -\frac{b}{m}x_2 - \frac{k}{m}x_1
+$$ {#eq-x2}
 
 Initial Conditions:
-$$x_1(t_0) = -0.15$$
-$$x_2(t_0) = 0.0$$
+
+$$
+x_1(t_0) = -0.15
+$$ {#eq-bc-x1}
+
+$$
+x_2(t_0) = 0.0
+$$ {#eq-bc-x2}
 
 Final Conditions:
-$$x_1(t_f) = 0.0$$
-$$x_2(t_f) = data$$
+
+$$
+x_1(t_f) = 0.0
+$$ {#eq-bc1-x1}
+
+$$
+x_2(t_f) = \mathrm{data}
+$$ {#eq-bc1-x2}
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.2cm and 0.55cm,
+    scale=1.0,
+    transform shape,
+    startstop/.style={
+        rectangle,
+        rounded corners,
+        minimum width=2.2cm,
+        minimum height=0.9cm,
+        text centered,
+        draw=black,
+        fill=gray!15,
+        font=\bfseries
+    },
+    process/.style={
+        rectangle,
+        minimum width=3.25cm,
+        minimum height=1.0cm,
+        text centered,
+        text width=3.25cm,
+        draw=black,
+        fill=blue!10
+    },
+    decision/.style={
+        diamond,
+        aspect=1.8,
+        minimum width=2.7cm,
+        minimum height=1.1cm,
+        text centered,
+        text width=2.7cm,
+        draw=black,
+        fill=yellow!20,
+        inner sep=0pt
+    },
+    arrow/.style={
+        thick,
+        ->,
+        >=stealth
+    }
+]
+% TOP ROW
+\node (start) [startstop] {Start};
+\node (init) [process, right=of start] {1. Load Data \\ \& Set $(k_0,b_0)$};
+\node (opt) [process, right=of init] {2. Proposal \\ Candidate $(k,b)$};
+\node (sim) [process, right=of opt] {3. Physics Sim \\ Solve ODE};
+% BOTTOM ROW
+\node (cost) [process, below=1.4cm of sim] {4. Cost Eval \\ Calculate $SSE$};
+\node (check) [decision, below=1.4cm of opt] {Converged? \\ ($SSE < \mathrm{Tol}$)};
+\node (out) [process, below=1.4cm of init] {5. Display Optimal \\ $(k,b)$ \& Plot};
+\node (stop) [startstop, below=1.4cm of start] {End};
+% TOP ROW ARROWS
+\draw [arrow] (start.east) -- (init.west);
+\draw [arrow] (init.east) -- (opt.west);
+\draw [arrow] (opt.east) -- (sim.west);
+% SIMULATION TO COST
+\draw [arrow] (sim.south) -- (cost.north);
+% BOTTOM ROW ARROWS
+\draw [arrow] (cost.west) -- (check.east);
+\draw [arrow] (check.west) -- node[above, xshift=0.25cm, font=\small\bfseries] {Yes} (out.east);
+\draw [arrow] (out.west) -- (stop.east);
+% FEEDBACK ARROW
+\draw [arrow] (check.north) -- node[right, font=\small\bfseries] {No (Update $k,b$)} (opt.south);
+\end{tikzpicture}
+\end{center}
+```
+
+Below, the proper optimization problem is formulated:
+
+$$
+J(k, b) = \sum_{i=1}^{N} (v_{sim, i}(m_i, k, b) - v_{data, i})^2
+$$
+
+with the non-linear constriants as the dynamics model of the system given in the @eq-x1 and @eq-x2, with the boundary constrains @eq-bc-x1, @eq-bc-x2, @eq-bc1-x1 and @eq-bc1-x2. 
+
+
+This can be solved using different methods to find global optimal solution, but as per the authors best of knowledge, evoluctionary algorithums are prefered for the parameters estimation. In this case, @storn1997differential, simple and first strategy, *𝐷𝐸∕𝑟𝑎𝑛𝑑∕1* is implemented in this with the hyperparameters given below:
+
+| Parameter | Symbol | Value | Description |
+|:----------|:------:|------:|:------------|
+| Population size | \(NP\) | 10 | Number of individuals in the population |
+| Maximum generations | \(MaxGen\) | 50 | Number of generations |
+| Mutation factor | \(F\) | 0.8 | Differential weight |
+| Crossover rate | \(CR\) | 0.9 | Probability of crossover |
+| Number of parameters | \(D\) | 2 | Number of optimization parameters |
+
+: Differential Evolution hyperparameters. {#tbl-de-hyperparameters}
+
+
+The optimization parameters $k$ and $b$, the lower and upper bounds are defined as
+
+$$
+\begin{aligned}
+10 &\leq k \leq 1000,\\
+0 &\leq b \leq 50.
+\end{aligned}
+$$ {#eq-parameter-bounds}
+
+
+A simple *RK4* integrater is built to integrate the both the equations simulationally, from the given initial state to the final condition, $x_2(t_f) = 0.0$, but it was observed that, for few combinations of the $k$ and $b$ takes the longer time, mainly due to higher $b$, took too long to resolve or never reached separation.
+
+TO fix this, author added the maximum limit of the $t_f = 10s$, which is added in the *RK4* loop such that If the simulation successfully reaches $x_1(t_f) \ge 0$ within this limit, it sets a success flag to True and outputs the final velocity $x_2(t_f)$, if it hits the time limit without separating, it sets the success flag to False and outputs $x_2(t_f) = \text{NaN}$, which penalizes that candidate in the optimizer.
+
+::: {#fig-mass-vel layout-ncol=1 fig-pos="H"}
+
+![](images/GNC_img_4.png){#fig-mass-vel}
+
+Mass vs Veclocity: Simulated  Curve and Given data 
+
+:::
+
+
+The MATLAB output is given below:
+
+```text
+Generation 46/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000
+Generation 47/50 started...
+Generation 47/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000
+Generation 48/50 started...
+Generation 48/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000
+Generation 49/50 started...
+Generation 49/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000
+Generation 50/50 started...
+Generation 50/50 | Best Cost = 0.003424 | k = 360.2204 | b = 0.0000
+
+ DE Optimization Complete
+Best Cost                    : 0.0034241292
+Estimated Spring Constant k  : 360.220434 N/m
+Estimated Damping Coefficient b : 0.000020 Ns/m
+```
+From the above results, it can be seen that the estimated damping coefficent is almost zero, $b = 0.000020\ \mathrm{Ns/m}$. This shows that the damping effect in the system is very small and can be neglected. Hence, the system mainly behaves like a spring-mass system, with the estimated spring constant of $k = 360.220434\ \mathrm{N/m}$. The simulated results obtained from these parameters are compared with the given data in @fig-mass-vel.
+
+
+The objective function can be even reduced by running it for more generation or the adding the tolerenace limit on the objective function. The author belives that, it will lead to the cost function to zero and the $k = 360 \; and b = 0.0$. 
+
+
+
+::: {#fig-obj-kb layout-ncol=1 fig-pos="H"}
+
+![](images/GNC_img_5.png){#fig-obj-kb}
+
+Generation vs Coast, k and b
+
+:::
+
 
 
 \pagebreak
 
 # References
+
+
