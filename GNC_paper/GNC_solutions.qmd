@@ -25,7 +25,7 @@ header-includes:
 
 # Introduction {#sec-introduction}
 
-The document contains the various solution methods for the GNC assignment problems. The given problems can be solved using more then one method, which author tried to implement. The document generated using [Quarto](https://quarto.org/docs/journals/) locally, created by the author. The source remains editable as a normal `.qmd` manuscript and the template can be found [here](https://github.com/kirancoder/paper_template/tree/main/sample_paper).
+The document contains the various solution methods for the GNC assignment problems. The given problems can be solved using more then one method, and author implemented one method and other methods are mentioned. The document generated using [Quarto](https://quarto.org/docs/journals/) locally, created by the author. The source remains editable as a normal `.qmd` manuscript and the template can be found [here](https://github.com/kirancoder/paper_template/tree/main/sample_paper).
 
 
 # Task 1 {#sec-task1}
@@ -151,7 +151,7 @@ n = \frac{(r-p)^2 - r(r-p) cos(\theta)}{\sqrt{r^2+(r-p)^2-2r(r-p)\cos\theta}}
 \end{aligned}
 $$ 
 
-So, the downhill distance ($n$), is the function $p, q, \text{and} r$ as $\theta$ is also function of $p, q, \; \text{and} \; r$
+So, the downhill distance ($n$), is the function $p, q, \text{and} r$ as $\theta$ is also function of $q, \; \text{and} \; r$
 
 $$
 n = g(p, q, r)
