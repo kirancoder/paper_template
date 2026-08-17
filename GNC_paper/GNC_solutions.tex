@@ -335,13 +335,13 @@ arc in circle,
 \theta = \frac{l}{r}
 }\end{equation}
 
-where \(l = \overset{\frown}{AB}\) and \(r\) is radius and \(\theta\) is
-angle suspended by the sector.
+where \(l = \overset{\frown}{AA'}\) and \(r\) is radius and \(\theta\)
+is angle suspended by the sector.
 
 The lengths \(q\) which is the radius of the cone, the permeter of the
 sector can derivied from that,
 \begin{equation}\protect\phantomsection\label{eq-cone}{
-\overset{\frown}{AB} = 2\, \pi \, q
+\overset{\frown}{AA'} = 2\, \pi \, q
 }\end{equation}
 
 Now, substiting arc length relation into Equation~\ref{eq-r_theta},
@@ -530,7 +530,7 @@ x_2(t_f) = \mathrm{data}
 \node (sim) [process, right=of opt] {3. Physics Sim \\ Solve ODE};
 % BOTTOM ROW
 \node (cost) [process, below=1.4cm of sim] {4. Cost Eval \\ Calculate $SSE$};
-\node (check) [decision, below=1.4cm of opt] {Converged? \\ ($SSE < \mathrm{Tol}$)};
+\node (check) [decision, below=1.4cm of opt] {Converged? \\ ($SSE < \mathrm{Tol} \; \text{or} \; MAX\; Itra$)};
 \node (out) [process, below=1.4cm of init] {5. Display Optimal \\ $(k,b)$ \& Plot};
 \node (stop) [startstop, below=1.4cm of start] {End};
 % TOP ROW ARROWS
@@ -618,11 +618,11 @@ are defined as
 
 A simple \emph{RK4} integrater is built to integrate the both the
 equations simulationally, from the given initial state to the final
-condition, \(x_2(t_f) = 0.0\), but it was observed that, for few
+condition, \(x_1(t_f) = 0.0\), but it was observed that, for few
 combinations of the \(k\) and \(b\) takes the longer time, mainly due to
 higher \(b\), took too long to resolve or never reached separation.
 
-TO fix this, author added the maximum limit of the \(t_f = 10s\), which
+To fix this, author added the maximum limit of the \(t_f = 10s\), which
 is added in the \emph{RK4} loop such that If the simulation successfully
 reaches \(x_1(t_f) \ge 0\) within this limit, it sets a success flag to
 True and outputs the final velocity \(x_2(t_f)\), if it hits the time
@@ -694,6 +694,10 @@ the \(k = 360 \; and \; b = 0.0\).
 \caption{\label{fig-obj-kb}Generation vs Coast, k and b}
 
 \end{figure}%
+
+This problem can also be solved using \(bvp_4c\) solver in MATLAB,
+usuallly used to solved coupled ODEs with boundary conditions. The newer
+methods like \emph{PINNs} can also be implemented to solve the same.
 
 \pagebreak
 
