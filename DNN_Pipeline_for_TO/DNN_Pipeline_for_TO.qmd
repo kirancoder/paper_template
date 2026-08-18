@@ -1,42 +1,41 @@
 ---
-title: "Reusable Academic Paper Template"
-subtitle: "A Quarto Template with Numbered Citations"
+title: "Deep Neural Network Pipeline for Trajectory Optimization"
 author:
-  - name: Alice Example
-    email: alice.example@university.edu
+  - name: Kiran M Aralikatti
+    email: kiranaralikatti6000@gmail.com
     affiliations:
-      - id: example-university
-        name: Example University
-        department: Department of Computer Science
-        address: 123 Research Avenue
-        city: Example City
-        country: Exampleland
-        postal-code: 12345
+      - id: iist
+        name: Indian Institute of Space Science and Technology
+        department: Department of Aerospace Engineering
+        city: Thiruvananthapuram
+        country: India
     attributes:
       corresponding: true
-  - name: Bob Researcher
-    email: bob.researcher@institute.edu
+  - name: Devendra P. Ghate
+    email: devendra.ghate@iist.ac.in
     affiliations:
-      - id: example-institute
-        name: Example Institute of Technology
-        department: Laboratory for Reproducible Research
-        address: 45 Method Road
-        city: Sample Town
-        country: Exampleland
-        postal-code: 67890
+      - id: iist
+        name: Indian Institute of Space Science and Technology
+        department: Department of Aerospace Engineering
+        city: Thiruvananthapuram
+        country: India
 abstract: |
-  This reusable Quarto template demonstrates a clean academic manuscript structure with automatic numbered citations, numbered bibliography entries, cross-references, equations, figures, and tables. Citations are written with standard Pandoc syntax, for example `[@einstein1905]`, while the rendered PDF displays numeric square-bracket citations.
+  This work presents a deep neural network pipeline for trajectory optimization, focusing on the comparison and analysis of direct and indirect methods. Indirect methods based on optimal control theory often suffer from issues such as chattering and sensitivity to initial costate guesses. To address these challenges, Physics-Informed Neural Networks (PINNs) are employed to solve the coupled state-costate equations in a mesh-free manner. Modified activation functions are introduced to improve PINN convergence and accuracy. A comparative study of the low-thrust spacecraft (LTS) trajectory optimization problem is conducted using classical indirect methods and the proposed PINN-based approach. Through extensive hyperparameter and optimizer tuning, the PINN-based method achieves accuracy on the order of 10^-10. Furthermore, random-walk initialized PINNs are used to generate 100,000 high-accuracy state-control pairs, demonstrating the potential of the approach for generating training data and solving optimal control problems.
 keywords:
-  - Quarto
-  - academic writing
-  - numbered citations
-  - reproducible research
+  - Trajectory Optimization
+  - Deep Neural Networks
+  - Physics-Informed Neural Networks
+  - Optimal Control
+  - State-Costate Equations
+  - Indirect Methods
 bibliography: references.bib
 format:
   elsevier-pdf:
     keep-tex: true
     number-sections: true
     colorlinks: true
+    geometry:
+      - margin=0.75in
     journal:
       name: "Template Journal"
       formatting: preprint
