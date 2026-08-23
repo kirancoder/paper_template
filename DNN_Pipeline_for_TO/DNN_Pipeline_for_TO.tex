@@ -361,7 +361,7 @@ robustness and ensuring the system operates effectively in dynamic
 environments. The general structure of such algorithms is illustrated in
 Figure~\ref{fig-modes}.
 
-\begin{figure}
+\begin{figure}[H]
 
 \begin{minipage}[t]{0.50\linewidth}
 
@@ -440,11 +440,17 @@ said to learn from experience \(E\) with respect to some task \(T\) and
 some performance measure \(P\), if its performance on \(T\), as measured
 by \(P\), improves with experience \(E\)'' \citep{chollet2021deep}.
 
-\begin{figure}
+\begin{figure}[H]
+
+\centering{
 
 \centering{
 
 \includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{Chapter1_imgs/c1.PNG}
+
+}
+
+\subcaption{\label{fig-ai-ml-dl}Offline Optimization}
 
 }
 
@@ -469,11 +475,17 @@ A typical architecture of a DNN is shown in
 Figure~\ref{fig-dnn-architecture}, illustrating how layers of neurons
 are stacked to form the model.
 
-\begin{figure}
+\begin{figure}[H]
+
+\centering{
 
 \centering{
 
 \includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{Chapter1_imgs/c2.PNG}
+
+}
+
+\subcaption{\label{fig-dnn-architecture}Offline Optimization}
 
 }
 
@@ -2933,6 +2945,97 @@ obtained via standard MATLAB solvers such as \texttt{bvp4c} and with
 analytical predictions, demonstrating both the effectiveness and
 computational efficiency of the ToC approach in solving energy-optimal
 planetary landing problems.
+
+\newpage
+
+\section*{Conclusion and Future work}\label{conclusion-and-future-work}
+\addcontentsline{toc}{section}{Conclusion and Future work}
+
+\subsection*{Conclusion}\label{conclusion}
+\addcontentsline{toc}{subsection}{Conclusion}
+
+This work explored various approaches to solving trajectory Optimization
+problems, a fundamental challenge in aerospace engineering. Beginning
+with an overview of the trajectory Optimization landscape, the thesis
+introduced the foundational concepts, including objective functions,
+constraints, and classifications such as direct and indirect methods. It
+highlighted the trade-offs between robustness, accuracy, and
+computational complexity inherent to each approach.
+
+The second part delved into classical direct methods such as the
+Trapezoidal and Hermite-Simpson discretizations. These methods transform
+the continuous-time optimal control problem into a nonlinear programming
+problem by discretizing state and control trajectories. While the
+Hermite-Simpson method demonstrated improved accuracy over the
+Trapezoidal method, both faced limitations in handling discontinuous
+control profiles, such as chattering in bang-bang problems. To address
+these, regularization techniques and optimizer refinements were applied,
+which significantly improved the smoothness and accuracy of the control
+profiles.
+
+The indirect method was then introduced, which formulates the trajectory
+Optimization problem using the Pontryagin Maximum Principle. By
+converting the optimal control problem into a two-point boundary value
+problem (TPBVP), the method yields high-accuracy solutions. However,
+solving the resulting coupled state-costate equations proved to be
+highly sensitive to initial guesses and numerically unstable, especially
+for problems involving complex or stiff dynamics.
+
+To overcome these challenges, the study implemented Physics-Informed
+Neural Networks (PINNs) as an alternative solver for the coupled ODEs.
+PINNs offered a mesh-free, data-free solution by embedding the physical
+constraints into the network's loss function. The effectiveness of the
+PINN was tested on scalar and vector optimal control problems, and its
+accuracy was enhanced using custom activation functions like the Rowdy
+Adaptive Activation Function (RAAF). While PINNs showed promise,
+especially with well-tuned architectures and initializations, their
+performance was sensitive to hyperparameters and required careful
+training.
+
+Finally, the Theory of Functional Connections (TFC) was presented as a
+highly efficient and accurate method for solving trajectory Optimization
+problems. By embedding the boundary conditions analytically into the
+solution structure, TFC converts constrained differential equations into
+unconstrained Optimization problems. The TFC-based least-squares method
+demonstrated excellent accuracy, reduced computational complexity, and
+exact satisfaction of boundary conditions. Unlike traditional
+collocation or shooting methods, TFC eliminates the need for numerical
+enforcement of constraints, making it highly suitable for solving both
+linear and nonlinear TPBVPs.
+
+\subsection*{Future Work}\label{future-work}
+\addcontentsline{toc}{subsection}{Future Work}
+
+As PINNs effectively solve coupled state and costate equations with
+reasonable accuracy, their performance may degrade as the complexity of
+the problem increases, particularly when the number of ODEs grows
+significantly. To address this limitation, advanced architectures such
+as Physics-Informed Deep Operator Networks (DeepONets) can be employed.
+DeepONets are designed to learn operators, offering superior accuracy
+and scalability compared to traditional PINNs for high-dimensional and
+complex dynamical systems.
+
+Once the state and costate trajectories are obtained through DeepONets,
+the resulting data can be utilized to train a standard DNN. This DNN
+would act as a mapping function from the initial state of the system to
+the optimal control policy, providing a computationally efficient
+framework for real-time control applications. Such a hybrid approach
+leverages the strengths of operator-learning frameworks and traditional
+neural networks, offering a promising avenue for solving challenging
+trajectory Optimization problems.
+
+In addition, future work can explore the integration of the Theory of
+Functional Connections (TFC) with nonlinear control problems and
+higher-dimensional systems. While the current application has been
+limited to one-dimensional or low-order linear problems, extending TFC
+to more general nonlinear time-varying systems could significantly
+broaden its applicability. Investigating adaptive basis selection,
+sparse representations, and GPU-accelerated implementations could
+further enhance its computational performance. Moreover, combining TFC
+with machine learning techniques to estimate parameters or control laws
+from data, while preserving the analytical constraint embedding of TFC,
+may lead to highly efficient hybrid solvers that retain interpretability
+and accuracy.
 
 \newpage
 

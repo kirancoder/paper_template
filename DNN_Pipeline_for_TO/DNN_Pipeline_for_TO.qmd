@@ -57,3 +57,7 @@ format:
 {{< include chapter_4.qmd >}}
 
 \newpage
+
+{{< include chapter_5.qmd >}}
+
+\newpage

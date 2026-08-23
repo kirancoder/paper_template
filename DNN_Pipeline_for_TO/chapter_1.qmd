@@ -67,7 +67,7 @@ Since offline and online modes each offer distinct advantages and limitations, a
 
 In real-world scenarios, relying solely on precomputed offline trajectories without incorporating state feedback can result in degraded performance under uncertainty. Online trajectory optimization compensates for these deviations by continuously adjusting control inputs based on the actual system state. Specifically, it aims to compute the optimal control given the current state, thereby enhancing robustness and ensuring the system operates effectively in dynamic environments. The general structure of such algorithms is illustrated in @fig-modes.
 
-::: {#fig-modes layout-ncol=2}
+::: {#fig-modes layout-ncol=2 fig-pos="H"}
 ![Offline Optimization](Chapter1_imgs/offline.PNG){#fig-offline}
 
 ![Online Optimization](Chapter1_imgs/online.PNG){#fig-online}
@@ -91,11 +91,21 @@ Machine Learning (ML) is a subset of artificial intelligence that focuses on ena
 
 The definition given by Prof. Tom Mitchell is: "A computer program is said to learn from experience $E$ with respect to some task $T$ and some performance measure $P$, if its performance on $T$, as measured by $P$, improves with experience $E$" [@chollet2021deep].
 
-![Artificial intelligence, machine learning, and deep learning [@chollet2021deep]](Chapter1_imgs/c1.PNG){#fig-ai-ml-dl width="60%"}
+::: {#fig-ai-ml-dl  fig-pos="H" width="40%"}
+![Offline Optimization](Chapter1_imgs/c1.PNG){#fig-ai-ml-dl width="60%"}
+
+Artificial intelligence, machine learning, and deep learning [@chollet2021deep]
+:::
+
 
 Deep learning is a specialized subfield of machine learning that focuses on learning hierarchical layers of representations from data. Unlike traditional machine learning approaches, which typically learn one or two layers of representations, deep learning involves multiple layers that progressively capture more meaningful features. These layers are learned automatically from training data, and the depth of the model refers to the number of layers. Modern deep learning models, often implemented using neural networks, can have tens or even hundreds of layers. Despite the term "neural network" being inspired by neurobiology, deep learning models are not directly related to the brain's structure or learning mechanisms. Instead, they serve as mathematical frameworks for learning complex representations from data. A typical architecture of a DNN is shown in @fig-dnn-architecture, illustrating how layers of neurons are stacked to form the model.
 
-![A typical Deep Neural Network (DNN) architecture showing multiple layers of neurons [@dnn2023]](Chapter1_imgs/c2.PNG){#fig-dnn-architecture width="60%"}
+
+::: {#fig-dnn-architecture fig-pos="H"}
+![Offline Optimization](Chapter1_imgs/c2.PNG){#fig-dnn-architecture  width="60%"}
+
+A typical Deep Neural Network (DNN) architecture showing multiple layers of neurons [@dnn2023]
+:::
 
 Since this thesis spans the complete development and application of various trajectory optimization techniques, ranging from classical numerical methods to modern deep learning approaches, literature reviews are integrated contextually at the beginning of each relevant chapter. For instance, Chapter 2 reviews traditional direct and indirect methods used in trajectory optimization, while Chapter 3 explores recent advances in Physics-Informed Neural Networks (PINNs) for solving optimal control problems. Chapter 4 introduces the Theory of Functional Connections (TFC), preceded by a review of boundary value problem-solving methods. Each of these reviews is presented just before the core technical content to ensure clarity and relevance.
 
