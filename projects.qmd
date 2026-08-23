@@ -1,0 +1,47 @@
+---
+title: "Projects"
+---
+
+# Projects
+
+## Deep Neural Network Pipeline for Trajectory Optimization
+
+**M.Tech Thesis** | *Advisor: Dr. Devendra P. Ghate* | IIST, 2024–2025
+
+Developed a comprehensive pipeline for low-thrust spacecraft trajectory optimization comparing:
+
+- **Direct methods**: Trapezoidal, Hermite–Simpson collocation with chattering regularization
+- **Indirect methods**: Pontryagin Maximum Principle, TPBVP shooting
+- **Physics-Informed Neural Networks**: Mesh-free solution of coupled state-costate equations
+  - Rowdy Adaptive Activation Functions (RAAF) for improved convergence
+  - Random-walk initialization for 100,000 high-accuracy state-control pairs
+  - Accuracy ~10⁻¹⁰ on LTS benchmark problems
+- **Theory of Functional Connections**: Analytical boundary satisfaction for constrained problems
+
+**Keywords**: PINNs, TFC, Optimal Control, Low-Thrust Steering, RAAF
+
+---
+
+## Energy-Optimal Planetary Landing via Theory of Functional Connections
+
+**Chapter 4 of Thesis** | IIST, 2024–2025
+
+- Formulated powered descent as constrained optimal control problem
+- Applied TFC to analytically satisfy boundary conditions and path constraints
+- Achieved high-accuracy fuel-optimal trajectories without constraint violations
+- Compared against direct collocation and pseudospectral baselines
+
+**Keywords**: TFC, Planetary Landing, Fuel Optimization, Constraint Handling
+
+---
+
+## Chattering Suppression in Indirect Trajectory Optimization
+
+**Chapter 2 of Thesis** | IIST, 2024
+
+- Analyzed bang-bang control chattering in Linear Tangent Steering problems
+- Implemented Lavrentiev and Tikhonov regularization strategies
+- Evaluated trade-offs between control smoothness and optimality
+- Integrated with Hermite–Simpson and pseudospectral discretizations
+
+**Keywords**: Regularization, Chattering, Bang-Bang Control, Collocation

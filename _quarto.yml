@@ -1,0 +1,56 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Kiran M Aralikatti"
+  site-url: "https://kiranaralikatti.github.io"
+  description: "Aerospace Engineering — Trajectory Optimization, Optimal Control, Deep Learning"
+  favicon: "favicon.ico"
+  repo-url: https://github.com/kiranaralikatti
+  repo-actions: [edit, issue]
+  
+  navbar:
+    background: primary
+    foreground: light
+    search: true
+    left:
+      - href: index.qmd
+        text: Home
+      - href: projects.qmd
+        text: Projects
+      - href: publications.qmd
+        text: Publications
+      - href: cv.qmd
+        text: CV
+      - href: notes.qmd
+        text: Notes
+      - href: https://github.com/kiranaralikatti
+        text: GitHub
+        icon: github
+      - href: https://linkedin.com/in/kiranaralikatti
+        text: LinkedIn
+        icon: linkedin
+
+  page-footer:
+    left: |
+      © 2025 Kiran M Aralikatti
+    right: |
+      Built with [Quarto](https://quarto.org)
+
+format:
+  html:
+    theme: 
+      light: [cosmo, custom.scss]
+    css: styles.css
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    number-sections: false
+    anchor-sections: true
+    code-fold: true
+    code-tools: true
+    smooth-scroll: true
+
+execute:
+  freeze: auto

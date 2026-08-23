@@ -9,9 +9,7 @@ author:
         department: Department of Aerospace Engineering
         city: Thiruvananthapuram
         country: India
-    attributes:
-      corresponding: true
-  - name: Devendra P. Ghate
+  - name: Dr. Devendra P. Ghate
     email: devendra.ghate@iist.ac.in
     affiliations:
       - id: iist
@@ -19,6 +17,8 @@ author:
         department: Department of Aerospace Engineering
         city: Thiruvananthapuram
         country: India
+    attributes:
+      corresponding: true
 abstract: |
   This work presents a deep neural network pipeline for trajectory optimization, focusing on the comparison and analysis of direct and indirect methods. Indirect methods based on optimal control theory often suffer from issues such as chattering and sensitivity to initial costate guesses. To address these challenges, Physics-Informed Neural Networks (PINNs) are employed to solve the coupled state-costate equations in a mesh-free manner. Modified activation functions are introduced to improve PINN convergence and accuracy. A comparative study of the low-thrust spacecraft (LTS) trajectory optimization problem is conducted using classical indirect methods and the proposed PINN-based approach. Through extensive hyperparameter and optimizer tuning, the PINN-based method achieves accuracy on the order of 10^-10. Furthermore, random-walk initialized PINNs are used to generate 100,000 high-accuracy state-control pairs, demonstrating the potential of the approach for generating training data and solving optimal control problems.
 keywords:
@@ -28,7 +28,7 @@ keywords:
   - Optimal Control
   - State-Costate Equations
   - Indirect Methods
-bibliography: references.bib
+bibliography: bibliography.bib
 format:
   elsevier-pdf:
     keep-tex: true
@@ -42,43 +42,18 @@ format:
       cite-style: number
 ---
 
-# Introduction {#sec-introduction}
+{{< include chapter_1.qmd >}}
 
-This document is a reusable academic Quarto template. It preserves the useful journal-style PDF functionality from the existing local Quarto extension while removing tutorial filler text.
+\newpage
 
-Single citations use normal Pandoc syntax, as in [@einstein1905]. A second citation appears independently as [@shannon1948]. Multiple citations are also written normally, for example [@einstein1905; @shannon1948; @knuth1984]. The citation numbers and bibliography numbering are generated automatically during rendering.
+{{< include chapter_2.qmd >}}
 
-Section references use Quarto cross-references. For example, @sec-methods introduces the reproducible methods pattern used by this template.
+\newpage
 
-# Methods {#sec-methods}
+{{< include chapter_3.qmd >}}
 
-Mathematical statements can be numbered and referenced. The mass-energy relation in @eq-energy is included as a compact example.
+\newpage
 
-$$
-E = mc^2
-$$ {#eq-energy}
+{{< include chapter_4.qmd >}}
 
-Additional inline mathematics can be written as $\alpha + \beta = \gamma$ without affecting equation numbering.
-
-# Results {#sec-results}
-
-Figures can be included with standard Markdown image syntax and a Quarto label. @fig-placeholder shows a placeholder figure that can be replaced with project-specific artwork.
-
-![Placeholder figure for the reusable paper template.](placeholder.png){#fig-placeholder width="55%"}
-
-Tables can be written directly in Markdown. @tbl-example reports a small example dataset.
-
-| Method | Accuracy | Runtime (s) |
-|:-------|---------:|------------:|
-| Baseline | 0.82 | 12.4 |
-| Proposed | 0.91 | 10.8 |
-
-: Example table with an automatically numbered caption. {#tbl-example}
-
-# Discussion {#sec-discussion}
-
-The document demonstrates references to @sec-introduction, @eq-energy, @fig-placeholder, and @tbl-example. The source remains editable as a normal `.qmd` manuscript, while Quarto and Pandoc handle numbering, citations, and bibliography generation.
-
-This final sentence cites a fourth source [@lamport1994] so that the bibliography demonstrates multiple automatically numbered entries.
-
-# References
+\newpage

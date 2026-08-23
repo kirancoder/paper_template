@@ -1,0 +1,11 @@
+% ************************** Thesis Abstract *****************************
+% Use `abstract' as an option in the document class to print only the titlepage and the abstract.
+\begin{abstract}
+Trajectory optimization plays a vital role in aerospace engineering and robotics, with solution strategies broadly classified into direct and indirect methods. This thesis begins by exploring direct methods, which discretize the trajectory and transcribe the optimal control problem into a nonlinear programming problem (NLP). These methods are favored for their robustness and ease of implementation. However, they often suffer from the chattering effect, where the control profile exhibits rapid, oscillatory behavior that is numerically induced and physically unrealistic. Moreover, the resulting solution may be only sub-optimal, particularly in problems requiring smooth and analytically consistent control inputs.
+
+The study then examines indirect methods, which utilize the Pontryagin Maximum Principle (PMP) to derive necessary conditions for optimality in the form of differential equations. These methods offer high theoretical accuracy and can yield truly optimal solutions. Nonetheless, they are sensitive to initial guesses and prone to numerical instability, making their implementation challenging, especially for complex dynamical systems.
+
+This thesis also explores the potential of Physics-Informed Neural Networks (PINNs) to address these challenges by reformulating the solution process for indirect methods. PINNs embed the governing equations and boundary conditions directly into the loss function of a deep neural network, enabling a data-free and mesh-free approach to solving the differential equations. The study investigates the use of a modified activation function to enhance the accuracy and convergence of PINNs in solving state and costate equations derived from trajectory optimisation problems.
+
+
+\end{abstract}

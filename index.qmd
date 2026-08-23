@@ -1,0 +1,56 @@
+---
+title: ""
+---
+
+# Kiran M Aralikatti
+
+**M.Tech Aerospace Engineering**  
+Indian Institute of Space Science and Technology (IIST)  
+kiranaralikatti6000@gmail.com  
+
+[GitHub](https://github.com/kiranaralikatti) • [LinkedIn](https://linkedin.com/in/kiranaralikatti) • [CV](cv.pdf)
+
+---
+
+## Biography
+
+I am an M.Tech student in Aerospace Engineering at the Indian Institute of Space Science and Technology (IIST), Thiruvananthapuram, working under the guidance of Dr. Devendra P. Ghate. My research focuses on trajectory optimization for aerospace systems, combining classical optimal control theory with modern deep learning approaches. I develop Physics-Informed Neural Networks (PINNs) and Theory of Functional Connections (TFC) methods to solve complex optimal control problems, with applications in low-thrust spacecraft trajectory optimization and planetary landing.
+
+---
+
+## Research Interests
+
+- **Trajectory Optimization** — Direct and indirect methods, low-thrust spacecraft, planetary landing
+- **Optimal Control** — Pontryagin's Maximum Principle, Hamilton-Jacobi-Bellman equations, two-point boundary value problems
+- **Physics-Informed Machine Learning** — PINNs for ODE/PDE solutions, adaptive activation functions, mesh-free methods
+- **Theory of Functional Connections** — Analytical constraint embedding for boundary value problems
+- **Real-time Guidance & Control** — Hybrid offline-online optimization, neural network-based feedback policies
+
+---
+
+## Selected Projects
+
+| Project | Description | Methods |
+|---------|-------------|---------|
+| **Deep Neural Network Pipeline for Trajectory Optimization** (M.Tech Thesis) | End-to-end pipeline comparing direct/indirect methods with PINNs and TFC for low-thrust spacecraft problems | PINNs, RAAF activation, random-walk initialization, TFC, Hermite-Simpson collocation |
+| **Energy-Optimal Planetary Landing via TFC** | Fuel-optimal powered descent using Theory of Functional Connections | TFC, constrained optimization, analytical boundary satisfaction |
+| **Chattering Suppression in Indirect Methods** | Regularization strategies for bang-bang control in linear tangent steering | Lavrentiev regularization, pseudospectral methods |
+
+---
+
+## Selected Publications
+
+1. **Kiran M Aralikatti**, Devendra P. Ghate — *Deep Neural Network Pipeline for Trajectory Optimization* (M.Tech Thesis, IIST, 2025)
+2. **Kiran M Aralikatti**, Devendra P. Ghate — *Physics-Informed Neural Networks for Low-Thrust Trajectory Optimization* (Under preparation)
+
+---
+
+## Latest Technical Notes
+
+- [Solving TPBVPs with PINNs: A Practical Guide](notes/pinn-tpbvp-guide.qmd) — *Aug 2025*
+- [Theory of Functional Connections for Aerospace Applications](notes/tfc-aerospace.qmd) — *Jul 2025*
+- [Hermite-Simpson Collocation for LTS Problems](notes/hermite-simpson-lts.qmd) — *Jun 2025*
+
+---
+
+[View all notes →](notes.qmd) | [Download CV →](cv.pdf)
