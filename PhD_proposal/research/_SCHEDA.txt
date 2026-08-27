@@ -1,0 +1,250 @@
+ PhD in INGEGNERIA AEROSPAZIALE / AEROSPACE
+            ENGINEERING - 42nd cycle
+
+THEMATIC Research Field: ADVANCED CONTROL DESIGN METHODS FOR AUTONOMOUS
+                             AEROSPACE VEHICLES
+
+
+                               Monthly net income of PhDscholarship (max 36 months)
+                                                            1600.0
+In case of a change of the welfare rates during the three-year period, the amount could be modified.
+
+
+
+                                              Context of the research activity
+
+                                                    Autonomous aerospace vehicles are increasingly
+                                                    expected to operate in complex, uncertain, and
+                                                    dynamically changing environments while maintaining
+                                                    high levels of performance, safety, and reliability. This is
+                                                    particularly challenging for systems whose dynamics are
+                                                    strongly affected by nonlinearities, aerodynamic
+                                                    uncertainties, actuator limitations, configuration changes,
+                                                    environmental disturbances, and imperfect modelling.
+                                                    Classical flight control approaches remain essential, but
+                                                    they need to be extended and integrated with advanced
+                                                    nonlinear, robust, adaptive, and data-informed methods in
+                                                    order to address the performance and reliability
+                                                    requirements of next-generation autonomous flight. The
+Motivation and objectives of the research           objective of this research is to develop advanced flight
+in this field
+                                                    control methodologies for autonomous aerospace
+                                                    systems, with particular emphasis on nonlinear control,
+                                                    robustness to modelling uncertainty, adaptive
+                                                    compensation mechanisms, and the systematic
+                                                    integration of uncertain or data-enhanced models within
+                                                    control architectures. The research will address model-
+                                                    based approaches such as nonlinear dynamic inversion,
+                                                    feedback linearisation, flatness-based control, adaptive
+                                                    control, robust control, and control allocation, together
+                                                    with methodologies that exploit experimental or
+                                                    operational data to improve modelling, estimation, and
+                                                    compensation of uncertain aerodynamic and dynamic
+                                                    effects. A central goal is to define control architectures
+                                                    that can exploit available physical models while
+                                                                                                              1/6
+                                      systematically accounting for uncertainty, limited model
+                                      fidelity, and available data. This includes the development
+                                      of methods able to preserve interpretability and
+                                      certifiability, which are crucial in aerospace applications,
+                                      while improving performance and adaptability with respect
+                                      to purely fixed-model designs. The research will also
+                                      consider the interaction between high-level trajectory
+                                      generation and low-level control, with special attention to
+                                      actuator constraints, redundancy, and allocation of control
+                                      effort. The expected outcome is a coherent
+                                      methodological framework for the design, analysis, and
+                                      validation of advanced flight controllers for autonomous
+                                      aerospace platforms. The framework should support
+                                      different levels of model fidelity, from analytical nonlinear
+                                      models to data-enhanced representations, and should be
+                                      applicable to both simulation environments and
+                                      experimental platforms available in the research group.
+
+
+                                      The research will develop an integrated methodological
+                                      framework for the design, analysis, and validation of
+                                      advanced flight control systems for autonomous
+                                      aerospace vehicles. The starting point will be the
+                                      nonlinear dynamics of the vehicle, using concepts such as
+                                      nonlinear dynamic inversion, feedback linearisation, and
+                                      flatness-based design to exploit the equations of motion
+                                      and obtain interpretable control architectures. These
+                                      methods will provide a common basis on which
+                                      robustness, adaptation, actuator management, and
+                                      uncertainty compensation can be introduced. A key
+Methods and techniques that will be
+developed and used to carry out the   objective will be to account for the gap between nominal
+research                              models and real flight behaviour. Uncertainty may arise
+                                      from aerodynamic effects, parameter variations, actuator
+                                      dynamics, disturbances, configuration changes,
+                                      operational conditions, or modelling assumptions. Robust
+                                      and adaptive control techniques, including L1-inspired
+                                      architectures, will be considered to improve performance
+                                      and stability in the presence of such effects. Attention will
+                                      be paid to the interaction between nominal nonlinear
+                                      design, robustness margins, adaptation bandwidth, and
+                                      implementation constraints. The same viewpoint will be
+                                      adopted for control allocation. For redundant or over-
+                                      actuated aerospace platforms, the controller must
+                                                                                                 2/6
+                         translate desired forces and moments into actuator
+                         commands while respecting saturation, rate limits,
+                         efficiency criteria, and possible degradation or failures.
+                         Allocation will therefore be considered as part of the
+                         control architecture, rather than as a separate post-
+                         processing block, so that actuator constraints and vehicle
+                         capabilities are reflected in design and validation. Data-
+                         informed modelling and compensation methods may be
+                         used in a complementary and uncertainty-aware role.
+                         Experimental, simulation, or operational data may support
+                         the identification of residual dynamics, the refinement of
+                         uncertain aerodynamic or dynamic terms, and the
+                         assessment of model uncertainty. The emphasis will be
+                         on control schemes that preserve the physical structure
+                         and interpretability of model-based designs, while
+                         exploiting available information to improve prediction,
+                         compensation, and robustness assessment. The
+                         methods will be evaluated through nonlinear simulation,
+                         comparative analysis, and, where appropriate,
+                         experimental testing on available aerospace platforms.
+                         The research will favour modular architectures that can
+                         accommodate different vehicle configurations and levels
+                         of model fidelity.
+
+
+                         The doctoral programme will provide advanced training in
+                         the theory, implementation, and validation of modern flight
+                         control systems for autonomous aerospace vehicles. The
+                         educational objective is to form a researcher able to work
+                         at the interface between aerospace engineering, flight
+                         dynamics, and control theory, with awareness of the
+                         requirements of safety-critical aerospace applications.
+                         The candidate will acquire solid competences in flight
+Educational objectives   dynamics, nonlinear systems, and advanced control
+                         methods, including feedback linearisation, nonlinear
+                         dynamic inversion, flatness-based control, robust and
+                         adaptive control for uncertain dynamical systems, and L1-
+                         inspired architectures. The programme will also cover
+                         control allocation for redundant and over-actuated
+                         systems, with emphasis on optimisation tools for
+                         constrained actuator management, actuator limitations,
+                         redundancy management, and degradation or failure
+                         scenarios. Data-informed modelling and uncertainty
+                                                                                  3/6
+                    representation techniques may also be considered as
+                    complementary tools to support model refinement,
+                    uncertainty assessment, and controller validation. From
+                    an implementation perspective, the candidate will learn to
+                    translate advanced control algorithms into software
+                    suitable for simulation and testing. This includes modelling
+                    of aerospace vehicle dynamics, numerical simulation,
+                    controller tuning, performance assessment, robustness
+                    analysis, and experimental validation. The candidate will
+                    also gain experience with tools commonly used in
+                    aerospace control research, such as MATLAB/Simulink
+                    and related simulation environments. A further
+                    educational objective is to develop the ability to critically
+                    assess the advantages and limitations of different control
+                    paradigms. The candidate should become able to
+                    distinguish between situations in which nominal model-
+                    based design is sufficient, cases in which robust or
+                    adaptive mechanisms are required, and cases in which
+                    additional data or uncertainty information can provide
+                    measurable benefits. Particular emphasis will be placed
+                    on interpretability, validation, safety, and the relation
+                    between performance improvement and certification-
+                    oriented constraints. The programme will also support
+                    transferable skills, including scientific writing, presentation
+                    of research results, collaborative software development,
+                    experimental planning, and interaction with industrial or
+                    institutional stakeholders in autonomous aerospace
+                    systems.
+
+
+                    The competences developed during the doctoral
+                    programme are relevant to sectors in which autonomous
+                    aerospace systems, advanced flight control, robust
+                    autonomy, and uncertainty-aware design are becoming
+                    strategic technologies. The most immediate opportunities
+                    are in the aerospace and unmanned systems industries,
+Job opportunities   where companies are developing drones, advanced air
+                    mobility platforms, space robotic systems to name a few.
+                    In these contexts, expertise in nonlinear control, adaptive
+                    control, robust control, control allocation, and uncertainty
+                    compensation is valuable for the development of reliable,
+                    high-performance flight-control systems. The doctoral
+                    profile is also relevant for research and development
+                                                                                 4/6
+                                      positions in companies working on safety-critical
+                                      autonomy. The ability to combine physical modelling,
+                                      control-oriented analysis, and uncertainty representation
+                                      is attractive for organisations seeking to improve
+                                      engineering workflows while preserving interpretability,
+                                      robustness, and validation capability. Further
+                                      opportunities exist in the defence, security, civil protection,
+                                      infrastructure-monitoring, and space sectors, where
+                                      autonomous vehicles are used in demanding scenarios
+                                      and must cope with uncertain environments, disturbances,
+                                      actuator limitations, and mission constraints. The skills
+                                      developed in control allocation, adaptive compensation,
+                                      and robust nonlinear control can also be transferred to
+                                      other domains involving autonomous or over-actuated
+                                      systems, such as marine robotics, ground robotics,
+                                      industrial automation, and space systems. The doctoral
+                                      training will also prepare the candidate for academic and
+                                      institutional research careers. The methodological nature
+                                      of the project, combining control theory, flight dynamics,
+                                      aerospace systems, and uncertainty-aware design, is well
+                                      aligned with research positions in universities, research
+                                      centres, and international laboratories working on
+                                      autonomous systems. The candidate will be able to
+                                      contribute to both theoretical developments and applied
+                                      experimental programmes. Finally, the profile is suitable
+                                      for roles involving technology transfer, system integration,
+                                      and high-level engineering consultancy. Graduates will be
+                                      able to support the development of advanced control
+                                      architectures, assess robustness and validation
+                                      requirements, design simulation and experimental
+                                      campaigns, and contribute to multidisciplinary teams
+                                      working on autonomous aerospace systems.
+
+                                      1 Full Professors
+                                      1 Associated Professors
+Composition of the research group     0 Assistant Professors
+                                      4 PhD Students
+Name of the research directors        Davide Invernizzi
+
+
+                                            Contacts
+
+Dipartimento di Scienze e Tecnologie Aerospaziali - Politecnico di Milano - via La Masa 34,
+20156 Milano - Italy - tel. +390223998323 - fax +390223998334 - web site: www.aero.polimi.it
+
+
+                                                                                                   5/6
+                 Additional support - Financial aid per PhD student per year (gross amount)
+
+Housing - Foreign Students                                                    --
+
+Housing - Out-of-town residents                                               --
+
+
+                                   Scholarship Increase for a period abroad
+Amount monthly                              800.0 €
+By number of months                         6
+
+
+Additional information: educational activity, teaching assistantship, computer availability, desk availability,
+any other information
+
+The PhD candidate will receive a desk, possibly through a hot-desking procedure, and a personal
+computer, if needed. Apart from the compulsory ones, the PhD candidate will have the
+opportunity to follow additional courses and receive economic support to attend summer schools
+and participate in conferences. There will be the possibility of paid teaching assistantship.
+
+
+
+
+                                                                                                                  6/6
+
