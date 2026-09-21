@@ -1,5 +1,7 @@
 # Trajectory Optimization using Deep Neural Network
 
+This chapter applies Physics-Informed Neural Networks (PINNs) to trajectory optimization problems. It begins with a general formulation of the PINN framework, then applies it progressively to a scalar benchmark problem, the classical Linear Tangent Steering (LTS) problem, and finally to a class of parameterized trajectory optimization problems in which many problem instances must be solved efficiently. The chapter closes with a physics-informed simplification that exploits known solution structure, and a discussion of remaining limitations.
+
 ## Physics-Informed Neural Networks Architecture
 
 Physics-Informed Neural Networks (PINNs) are a class of deep learning models designed to solve ordinary and partial differential equations (ODEs and PDEs) by incorporating physical laws directly into the neural network training process. Unlike traditional numerical methods that rely on mesh-based discretization, PINNs embed the governing equations as soft constraints into the loss function, enabling mesh-free, data-efficient, and interpretable solutions [@raissi2019physics; @karniadakis2021physics].
@@ -78,13 +80,15 @@ Despite these benefits, several challenges remain. Training PINNs for stiff or h
 
 Recent advances have addressed some of these challenges through methods such as adaptive activation functions, residual-based adaptive sampling, transfer learning, and domain decomposition, which improve training stability and efficiency [@mcclenny2020self; @shukla2021parallel; @lu2021deepxde].
 
-## ODEs Solution using PINNs
+## Solving ODEs using PINNs
 
-### Scalar Trajectory Optimization
+This section applies the PINN framework to specific trajectory optimization problems. Two examples are considered: a scalar linear-quadratic benchmark taken from optimal control theory, and the classical Linear Tangent Steering (LTS) problem introduced in @sec-ch2-lts. Each example is presented end-to-end — problem statement, PINN representation, loss function, training setup, and baseline result — so that the reader can follow a complete workflow without jumping between sections.
 
-We consider an optimal control problem given in [@pinch1995optimal] example 4.3, involving a linear first-order dynamical system, where the state $x(t)$ evolves according to the control input $u(t)$ through the relation $\dot{x}(t) = -x(t) + u(t)$. The goal is to drive the system from the initial condition $x(0) = 0$ to the final state $x(1) = 2$ over the fixed time interval $t \in [0, 1]$. To achieve this, we aim to determine the optimal control $u(t)$ that minimizes the quadratic cost functional, which penalizes both the magnitude of the state and the control effort over time. This cost functional captures the trade-off between maintaining the state close to the origin and minimizing the energy or effort required for control.
+### Scalar Trajectory Optimization Problem
 
-The system dynamics, boundary conditions, and cost functional are given as:
+We first consider an optimal control problem given in [@pinch1995optimal] (Example 4.3), involving a linear first-order dynamical system in which the state $x(t)$ evolves according to the control input $u(t)$ through the relation $\dot{x}(t) = -x(t) + u(t)$. The goal is to drive the system from the initial condition $x(0) = 0$ to the final state $x(1) = 2$ over the fixed time interval $t \in [0, 1]$, while determining the optimal control $u(t)$ that minimizes the quadratic cost functional penalizing both the magnitude of the state and the control effort. This cost functional captures the trade-off between maintaining the state close to the origin and minimizing the energy or effort required for control.
+
+The system dynamics, boundary conditions, and cost functional are:
 
 $$
 \begin{aligned}
@@ -94,13 +98,13 @@ J &= \frac{1}{2} \int_0^1 \left( 3x^2(t) + u^2(t) \right) \, dt. && \text{(Cost 
 \end{aligned}
 $$ {#eq-ch3-scalar-problem}
 
-The Hamiltonian
+**Analytical reduction via PMP.** The Hamiltonian is
 
 $$
 H = \frac{3}{2} x^2 + \frac{1}{2} u^2 + \lambda (-x + u).
 $$ {#eq-ch3-scalar-hamiltonian}
 
-There is no constraint on $u$, so to maximize $H$ we consider $\frac{\partial H}{\partial u}$.
+There is no constraint on $u$, so to maximize $H$ we consider $\frac{\partial H}{\partial u}$:
 
 $$
 \frac{\partial H}{\partial u} = -u + \lambda \quad \text{and} \quad \frac{\partial^2 H}{\partial u^2} = -1.
@@ -136,16 +140,16 @@ $$
 u^* = \frac{2(2 \cosh 2t + \sinh 2t)}{\sinh 2}.
 $$ {#eq-ch3-scalar-u-optimal}
 
+**PINN representation and loss.** Using the optimality relations derived above, the system to be learned by the PINN reduces to the coupled state–costate ODEs:
+
 $$
 \begin{aligned}
-\dot{x}(t) = -x(t) + \lambda(t), && \text{(State ODE)}\\
-\dot{\lambda}(t) = 3x(t) + \lambda(t), && \text{(Costate ODE)}\\
+\dot{x}(t) &= -x(t) + \lambda(t), && \text{(State ODE)}\\
+\dot{\lambda}(t) &= 3x(t) + \lambda(t), && \text{(Costate ODE)}\\
 \end{aligned}
 $$ {#eq-ch3-scalar-state-costate}
 
-#### Loss Function
-
-In the PINNs framework, the state and costate equations are enforced through a loss that penalizes both the ODE residuals and the boundary conditions.
+In the PINN framework, the state and costate equations are enforced through a loss that penalizes both the ODE residuals and the boundary conditions.
 
 **Residual Loss.**
 
@@ -168,33 +172,11 @@ $$
 \qquad \sum_{i=1}^{m} w_i = 1.
 $$ {#eq-ch3-scalar-total-loss}
 
-### Linear Tangent Steering Problem
+![PINN architecture used for the scalar and LTS problems](Chapter3_imgs/c22.PNG){#fig-ch3-pinn-scalar width="55%"}
 
-As explained in Section 2.3, the Linear Tangent Steering (LTS) problem is a time-optimal control problem that aims to minimize the transfer time of the vehicle while satisfying the system dynamics and boundary conditions.
+#### Baseline Tanh Result
 
-#### Hyperparameters
-
-The PINNs model employs a fully connected feedforward neural network with 2 hidden layers, each containing 8 neurons. Training is conducted using the Adam optimizer with an initial learning rate of $10^{-3}$ over initial 1750 iterations and for next iterations 250 L-BFGS is employed. The total loss function uses weights $w_1 = 0.1$ and $w_2 = 0.9$ to prioritize boundary conditions. The model is trained with 100 domain collocation points and 2 boundary points at $t = 0$ and $t$. The architecture of the PINN designed for this problem is shown in @fig-ch3-pinn-scalar.
-
-![PINNs Architecture for scalar problem](Chapter3_imgs/c22.PNG){#fig-ch3-pinn-scalar width="55%"}
-
-### Tanh Activation Function
-
-The accuracy depends on the number of trainable parameters, so the number of the trainable parameters in the given architecture for Tanh activation function is given by the below calculation:
-
-For each layer in the network:
-
-$$
-\begin{aligned}
-\text{Number of Weights} &= n_\text{current} \times n_\text{next}, \\
-\text{Number of Biases} &= n_\text{next}, \\
-\text{Number of Parameters} &= \text{Number of Weights} + \text{Number of Biases}.
-\end{aligned}
-$$ {#eq-ch3-param-count}
-
-where $n_\text{current} =$ number of nodes in current layer and $n_\text{next} =$ number of nodes in next layer.
-
-The total number of trainable parameters is the sum of the parameters across all layers.
+Using a Tanh activation function, a fully connected feedforward network with two hidden layers of 16 neurons each yields the following trainable-parameter budget:
 
 | Layer | No of Weights | No of Biases | Total Parameters |
 |:------|:-------------:|:------------:|:----------------:|
@@ -205,101 +187,27 @@ The total number of trainable parameters is the sum of the parameters across all
 
 : Trainable Parameters per Layer (Tanh) {#tbl-ch3-trainable-tanh}
 
-Thus, the total number of trainable parameters in the network is $338$.
+With this configuration, the training process converged to a total loss of $\mathcal{L} = 1.038 \times 10^{-4}$. When compared against the analytical solution, the Root Mean Square (RMS) errors for the state and costate variables are $2.44 \times 10^{-3}$ and $3.64 \times 10^{-3}$, respectively. These results establish a Tanh-based baseline that will be used as a reference in the subsequent activation-function comparison.
 
-Using the same network configuration with a Tanh activation function, the training process yielded a total loss of $\mathcal{L} = 1.038 \times 10^{-4}$. When compared against the analytical solution, the Root Mean Square (RMS) errors for the state and costate variables are $2.44 \times 10^{-3}$ and $3.64 \times 10^{-3}$. These results confirm the efficacy of the chosen network architecture and highlight the capability of the Tanh activation function in approximating the solution with a certain level of accuracy.
+### Linear Tangent Steering Problem
 
-### Rowdy Adaptive Activation Function (RAAF)
+The LTS problem was introduced in @sec-ch2-lts as a classical time-optimal benchmark whose analytical solution is known. The corresponding indirect optimality conditions were derived in Chapter 2 and yield the coupled state–costate system that the PINN must satisfy.
 
-The development of sophisticated neural network architectures has been pivotal in advancing complex machine learning applications. One such innovation is the RAAF [@ccelik2024optimal], designed to enhance the learning capability and generalization power of neural networks by integrating adaptive and oscillatory properties into traditional activation functions. This function introduces a novel approach to balancing expressiveness and training stability, utilizing modifications of standard activations such as the Tanh function.
+#### Indirect Formulation
 
-#### Modified Tanh Function
-
-At the core of RAAF lies a modified Tanh function, mathematically expressed as:
-
-$$
-\sigma(x; \alpha) = \frac{e^{\alpha x} - e^{-\alpha x}}{e^{\alpha x} + e^{-\alpha x}},
-$$ {#eq-ch3-modified-tanh}
-
-where $\alpha$ is a trainable parameter that scales the input, providing flexibility in the activation behavior. By allowing $\alpha$ to adapt during training, the network gains additional capacity to capture complex patterns in data. This adaptive feature accelerates convergence, particularly in the early training stages, by reshaping the gradient landscape to avoid saturation.
-
-#### Rowdy Adaptive Activation Function
-
-RAAF [@jagtap2022deep] extends this concept by combining the modified Tanh function with trigonometric terms, introducing oscillatory components that enrich the activation function's representational diversity:
-
-$$
-\sigma_{\text{rowdy}}(x) = \sigma_{\text{base}}(x; \alpha) + \sum_{k=1}^N \beta_k \sin(k \omega x),
-$$ {#eq-ch3-raaf}
-
-where:
-$\sigma_{\text{base}}(x; \alpha)$ represents the adaptive Tanh function.
-$\beta_k$ and $\omega$ are trainable parameters that control the amplitude and frequency of the oscillations.
-
-This design ensures smoother loss landscapes during training, reducing the risk of convergence to local minima. The oscillatory components are particularly useful in handling high-frequency variations in the data, enabling the model to generalize effectively across diverse input distributions.
-
-For each layer in the network:
-
-$$
-\begin{aligned}
-\text{Number of Weights} &= n_\text{current} \times n_\text{next}, \\
-\text{Number of Biases} &= n_\text{next}, \\
-\text{Number of Parameters} &= \text{Weights} + \text{Biases}.
-\end{aligned}
-$$ {#eq-ch3-raaf-param-count}
-
-where $n_\text{current} =$ number of nodes in current layer and $n_\text{next} =$ number of nodes in next layer.
-
-Additionally, the RAAF adds:
-
-$$
-\text{Parameters}_\text{rowdy} = n_\text{hidden} \times \text{RAAF parameters}
-$$ {#eq-ch3-raaf-extra}
-
-for each neuron in the hidden layers.
-
-The total number of trainable parameters is the sum of all weights, biases, and RAAF-specific parameters.
-
-| Layers | No of Weights | No of Biases | RAAF Parameters | Total Parameters |
-|:-------|:-------------:|:------------:|:---------------:|:----------------:|
-| I/P to Hidden Layer | $1 \times 20 = 20$ | $20$ | $20 \times 3 = 60$ | $20 + 20 + 60 = 100$ |
-| Hidden to O/P Layer | $20 \times 2 = 40$ | $2$ | $0$ | $40 + 2 + 0 = 42$ |
-| **Total** | $60$ | $22$ | $60$ | $142$ |
-
-: Trainable Parameters per Layer (RAAF) {#tbl-ch3-trainable-raaf}
-
-Thus, the total number of trainable parameters in the network is: 142
-
-Using the RAAF with one hidden layer and 20 nodes in the hidden layer, the training process achieved a total loss of $\mathcal{L} = 4.19 \times 10^{-5}$. When compared to the analytical solution, the RMS errors for the state and costate variables were $6.54 \times 10^{-5}$ and $5.84 \times 10^{-5}$. These results demonstrate the effectiveness of the RAAF in improving the accuracy of the solution while maintaining robust convergence properties with less number of trainable parameters.
-
-![PINNs Solution using RAAF](Chapter3_imgs/comp_tah_rowdy.png){#fig-ch3-raaf-solution width="75%"}
-
-::: {#fig-ch3-error-comparison layout-ncol=2}
-![Total Error: Tanh.](Chapter3_imgs/tanh_error.png){#fig-ch3-tanh-error}
-
-![Total Error: RAAF.](Chapter3_imgs/RAAF_error.png){#fig-ch3-raaf-error}
-
-Comparison of the Total errors.
-:::
-
-## Linear Tangent Steering Problem
-
-### PINNs Method
-
-#### Objective Function and Hamiltonian Derivation
-
-The objective of the LTS problem is to minimize the final time $t_f$. Thus, the performance index (objective function) is:
+The objective of the LTS problem is to minimize the final time $t_f$. The performance index is therefore
 
 $$
 J = \int_{0}^{t_f} 1 \, dt = t_f.
 $$ {#eq-ch3-lts-objective}
 
-According to Pontryagin's Maximum Principle, we define the Hamiltonian $\mathcal{H}$ as:
+According to Pontryagin's Maximum Principle, the Hamiltonian $\mathcal{H}$ is
 
 $$
 \mathcal{H} = 1 + \lambda_1 \dot{x}_1 + \lambda_2 \dot{x}_2 + \lambda_3 \dot{x}_3 + \lambda_4 \dot{x}_4.
 $$ {#eq-ch3-lts-hamiltonian}
 
-Substituting the expressions for the state derivatives:
+Substituting the expressions for the state derivatives,
 
 $$
 \begin{aligned}
@@ -307,15 +215,13 @@ $$
 \end{aligned}
 $$ {#eq-ch3-lts-hamiltonian-sub}
 
-#### Costate Equations
-
-The costate dynamics are obtained from:
+The costate dynamics are obtained from
 
 $$
 \dot{\lambda}_i = -\frac{\partial \mathcal{H}}{\partial x_i}, \quad i = 1,2,3,4.
 $$ {#eq-ch3-lts-costate-general}
 
-Calculating the partial derivatives:
+which, for the LTS dynamics, evaluates to
 
 $$
 \begin{aligned}
@@ -326,27 +232,23 @@ $$
 \end{aligned}
 $$ {#eq-ch3-lts-costate}
 
-#### Optimal Control Law
-
-The optimal control $u^*(t)$ minimizes the Hamiltonian with respect to the control input $u(t)$:
+The optimal control minimizes the Hamiltonian with respect to $u$:
 
 $$
 u^*(t) = \arg\min_u \mathcal{H} = \arg\min_u \left( \lambda_3 a \cos(u) + \lambda_4 a \sin(u) \right).
 $$ {#eq-ch3-lts-optimal-control}
 
-This expression can be rewritten as:
+This can be rewritten as
 
 $$
-\mathcal{H}_{u} = a \left( \lambda_3 \cos(u) + \lambda_4 \sin(u) \right).
+\mathcal{H}_{u} = a \left( \lambda_3 \cos(u) + \lambda_4 \sin(u) \right),
 $$ {#eq-ch3-lts-hu}
 
-To minimize $\mathcal{H}_u$, the optimal control is given by:
+and yields the closed-form optimal control
 
 $$
-u^*(t) = \tan^{-1}\left( \frac{\lambda_4(t)}{\lambda_3(t)} \right),
+u^*(t) = \tan^{-1}\left( \frac{\lambda_4(t)}{\lambda_3(t)} \right).
 $$ {#eq-ch3-lts-u-optimal}
-
-#### Boundary Conditions
 
 The boundary conditions for the LTS problem are:
 
@@ -368,9 +270,9 @@ $$
 \lambda_1(t_f) = 0 \quad \text{(since } x_1(t_f) \text{ is free)}
 $$ {#eq-ch3-lts-transversality}
 
-#### Loss Function for Domain
+#### PINN Loss for the LTS Problem
 
-In the PINNs framework, the domain loss based on the residuals of the state and costate ODEs is defined as:
+In the PINN framework, the domain loss based on the residuals of the state and costate ODEs is
 
 $$
 \mathcal{L}_{\text{residual}} = \frac{1}{N}\sum_{i=1}^{N} \left[ 
@@ -379,11 +281,7 @@ $$
 \right],
 $$ {#eq-ch3-lts-domain-loss}
 
-where $f_j$ and $g_j$ denote the right-hand sides of the state and costate ODEs.
-
-#### Loss Function for Boundary Conditions
-
-The boundary loss enforces the known initial and final values, including the transversality condition:
+where $f_j$ and $g_j$ denote the right-hand sides of the state and costate ODEs. The boundary loss enforces the known initial and final values, including the transversality condition:
 
 $$
 \begin{aligned}
@@ -395,17 +293,21 @@ $$
 \end{aligned}
 $$ {#eq-ch3-lts-bc-loss}
 
-#### Total Loss Function
-
-The complete loss function for training the PINN model becomes:
+The complete loss function is therefore
 
 $$
 \mathcal{L}_{\text{PINN}} = w_1 \mathcal{L}_{\text{residual}} + w_2 \mathcal{L}_{\text{BC}},
 $$ {#eq-ch3-lts-total-loss}
 
-where $w_1 + w_2 = 1$ are hyperparameters controlling the balance between enforcing dynamics and boundary constraints.
+where $w_1 + w_2 = 1$ are hyperparameters controlling the balance between enforcing dynamics and boundary constraints. To place greater emphasis on the control within the physics-informed loss, the stationarity condition
 
-#### Hyperparameters Tuning
+$$
+\frac{\partial H}{\partial U} = 0 = -\lambda_3 \sin U + \lambda_4 \cos U
+$$ {#eq-ch3-lts-control-loss}
+
+is also included as part of the loss formulation.
+
+#### Hyperparameters and Training
 
 For hyperparameter tuning, the training process employs a total of $30{,}000$ iterations, with a total loss threshold of $10^{-4}$ used as the primary stopping criterion. To enhance stability, a patience mechanism [@sanchez2018real] is incorporated: once the loss falls below $10^{-4}$, training continues for an additional $20$ iterations to ensure the loss consistently remains under the specified threshold.
 
@@ -413,15 +315,7 @@ The training procedure adopts a two-stage Optimization strategy. During the firs
 
 This hybrid approach leverages the fast convergence properties of first-order methods during early training, while exploiting the higher accuracy of second-order methods in refining the solution as the loss approaches its minimum.
 
-To place greater emphasis on control within the physics-informed loss, we include the term
-
-$$
-\frac{\partial H}{\partial U} = 0 = -\lambda_3 \sin U + \lambda_4 \cos U
-$$ {#eq-ch3-lts-control-loss}
-
-as part of the loss formulation.
-
-As the analytical solution is available, the error of control is considered for tuning the network parameters. The below diagram shows how the error varied for the Tanh activation function for different number of hidden layers and nodes. The model with 3 hidden layers each with 60 nodes @fig-ch3-hp-control shows the best results, therefore, this model is used for further studies.
+As the analytical solution is available, the error of the control is considered for tuning the network parameters. The diagram below shows how the error varied for the Tanh activation function for different number of hidden layers and nodes. The model with 3 hidden layers each with 60 nodes (@fig-ch3-hp-control) shows the best results and is used for the subsequent activation-function comparison.
 
 ![MSE error of Control for different nodes and layers](Chapter3_imgs/HP_control_diff_total_nodes.png){#fig-ch3-hp-control width="75%"}
 
@@ -436,78 +330,35 @@ As the analytical solution is available, the error of control is considered for 
 
 : Mean Squared Error (MSE) for States, Control, and Final Time {#tbl-ch3-mse-lts}
 
-In the LTS case, careful tuning enabled the network to achieve mean squared errors (MSE) as low as $10^{-5}$ for control. This level of accuracy demonstrates the model's ability to learn the underlying physics while maintaining smooth and stable control profiles.
-
-### Weights Initialization and Interpolation
-
-![Weight Initialization and Interpolation](Chapter3_imgs/inter_process.PNG){#fig-ch3-interpolation width="75%"}
-
-#### Random Walk Initialization for LTS Problem
-
-A *random walk* approach was utilized within the PINNs framework to efficiently solve variations of the LTS problem under different boundary conditions. After successfully training the network for a base case (e.g., with $x_2(t_f) = 5.0$), the trained weights were saved. These weights capture meaningful features and the underlying dynamics of the problem corresponding to the given boundary condition.
-
-For a slightly perturbed case such as $x_2(t_f) = 4.9$, instead of retraining the network from random initialization, the saved weights were reused to initialize the network. This reuse significantly reduced the number of iterations required for convergence. The network adapted quickly to the new scenario since the dynamics remained similar, and the pre-trained weights already encoded a near-optimal structure of the solution. This process can be interpreted as performing a "random walk" in the parameter space progressively stepping from known solutions to nearby perturbed cases.
-
-Furthermore, for a range of other perturbations in $x_2(t_f)$, a linear interpolation of weights from nearby trained cases was used to generate initial guesses. These interpolated weights provided good initialization even in untrained regions of the parameter space, again accelerating convergence and improving training stability.
-
-In essence, this method acts as a time-saving mechanism, instead of solving each variation from scratch, which is computationally intensive, the PINNs leverage prior knowledge through a random walk strategy. This greatly enhances training efficiency and enables real-time adaptability in solving trajectory Optimization problems such as LTS, which is evident in the below figure.
-
-::: {#fig-ch3-interpolation-results layout-ncol=2}
-![Number of Function Evaluations.](Chapter3_imgs/ppt_FE_intre.png){#fig-ch3-fe-eval}
-
-![Time for Training.](Chapter3_imgs/ppt_time_intre.png){#fig-ch3-train-time}
-
-:::
-
-#### Recursive Weight Interpolation Procedure
-
-The interpolation approach is based on perturbing the final state condition $x_2(t_f)$ and utilizing the learned weights to extrapolate weights for further perturbations.
-
-- The first perturbation is applied with $\Delta x_2(t_f) = -0.1$, i.e., $x_2(t_f) = 4.9$. The network is trained using this modified final state by incorporating it into the loss function.
-
-- This network is initialized using the base weights (corresponding to $x_2(t_f) = 5.0$) and trained with the same stopping criterion as the base model. The loss drops below $10^{-4}$ within 300 iterations, indicating that the base weights significantly aided faster convergence. The network successfully adapted to the new final state with a much smaller error compared to training from scratch.
-
-- Once the network is trained for the perturbed final state $x_2(t_f) = 4.9$, the interpolation process is extended recursively to generate weights for additional perturbations.
-
-The core idea is to use a linear interpolation formula to predict new weights:
-
-$$
-w_{\text{new}} = m \cdot x_{2\text{(tf,new)}} + b
-$$ {#eq-ch3-interpolation}
-
-where:
-
-$$
-m = \frac{w_2 - w_1}{x_{2\text{(tf,2)}} - x_{2\text{(tf,1)}}}, \quad b = w_1 - m \cdot x_{2\text{(tf,1)}}
-$$ {#eq-ch3-interpolation-slope}
-
-- The weights corresponding to $x_2(t_f) = 5.0$ and $x_2(t_f) = 4.9$ are used to extrapolate the weights for $x_2(t_f) = 4.8$.
-
-- After verifying the performance of the network at $x_2(t_f) = 4.8$, the weights for $x_2(t_f) = 4.9$ and $4.8$ are used to extrapolate for $x_2(t_f) = 4.7$, and so on.
-
-- This recursive interpolation continues by always using the most recent two trained or extrapolated weight sets, i.e.,
-
-$$
-\text{Use } (w_{x_2 = 4.8}, w_{x_2 = 4.7}) \rightarrow w_{x_2 = 4.6}, \quad \text{and so on,}
-$$ {#eq-ch3-recursive}
-
-until the final state condition $x_2(t_f) = 4.0$ is reached.
-
-- A similar process is carried out in the forward direction. After training the network at $x_2(t_f) = 5.1$, the weights corresponding to $x_2(t_f) = 5.0$ and $5.1$ are used to extrapolate for $x_2(t_f) = 5.2$.
-
-- This forward recursive interpolation is repeated until $x_2(t_f) = 6.0$ is reached.
-
-- At each step, the accuracy of interpolated weights is evaluated by comparing them with weights obtained through direct training for the corresponding final state condition.
+In the LTS case, careful tuning enabled the network to achieve mean squared errors (MSE) as low as $10^{-5}$ for the control. This level of accuracy demonstrates the model's ability to learn the underlying physics while maintaining smooth and stable control profiles.
 
 ### Effect of Activation Function on Model Performance
 
-To investigate the role of activation functions in learning-based control tasks, we evaluate three variants: the standard Tanh, Layer-wise Locally Adaptive Activation Functions (L-LAAF) [@jagtap2022deep], and RAAF, implemented using the Rowdy formulation. These functions are tested in identical training setups to ensure fairness in comparison.
+To investigate the role of activation functions in learning-based control tasks, three variants are evaluated on the LTS problem: the standard Tanh, Layer-wise Locally Adaptive Activation Functions (L-LAAF) [@jagtap2022deep], and Rowdy Adaptive Activation Functions (RAAF) [@jagtap2022deep; @ccelik2024optimal]. RAAF extends the modified Tanh
 
-Each model is trained under the same initialization, training data, and stopping criteria. The goal is to assess how these activation functions impact convergence, stability, and the network's ability to generalize across perturbed final state conditions.
+$$
+\sigma(x; \alpha) = \frac{e^{\alpha x} - e^{-\alpha x}}{e^{\alpha x} + e^{-\alpha x}},
+$$ {#eq-ch3-modified-tanh}
 
-**1. Accuracy Comparison (Mean Squared Error)**
+where $\alpha$ is a trainable parameter that scales the input, by combining it with trigonometric terms:
 
-The Mean Squared Error (MSE) for key variables—state components $x_1, x_2, x_3, x_4$, control input $u$, and final time $t_f$—is computed post-training. The results are summarized in the table below:
+$$
+\sigma_{\text{rowdy}}(x) = \sigma_{\text{base}}(x; \alpha) + \sum_{k=1}^N \beta_k \sin(k \omega x),
+$$ {#eq-ch3-raaf}
+
+where $\sigma_{\text{base}}(x; \alpha)$ is the adaptive Tanh, and $\beta_k$, $\omega$ are trainable parameters controlling the amplitude and frequency of the oscillations.
+
+A key methodological point when comparing activation functions is that RAAF introduces additional trainable parameters inside the activation itself. For each neuron in the hidden layers,
+
+$$
+\text{Parameters}_\text{rowdy} = n_\text{hidden} \times \text{RAAF parameters},
+$$ {#eq-ch3-raaf-extra}
+
+so that the *total* number of trainable parameters depends on the activation-function choice, not just on the layer widths and depths. Consequently, a comparison in which Tanh and RAAF share an *identical* network architecture will, in general, give RAAF a strictly larger parameter budget and therefore an unfair advantage. A fair comparison requires matching the *total* trainable-parameter count across activations by adjusting the number of hidden layers and/or neurons accordingly. The results reported below for the LTS problem use architectures that were tuned independently for each activation; an explicitly equal-trainable-parameter comparison was not available in the current results and is left as a TODO item for future work.
+
+#### Accuracy Comparison (Mean Squared Error)
+
+The Mean Squared Error (MSE) for key variables — state components $x_1, x_2, x_3, x_4$, control input $u$, and final time $t_f$ — is computed post-training. The results are summarized below:
 
 | Variable | RAAF | L-LAAF | Tanh |
 |:---------|-----:|-------:|-----:|
@@ -520,9 +371,35 @@ The Mean Squared Error (MSE) for key variables—state components $x_1, x_2, x_3
 
 : Comparison of MSE for different activation functions {#tbl-ch3-mse-activation}
 
-RAAF yields the lowest MSE across most variables, especially in control and states $x_1$ and $x_2$, indicating strong learning and generalization. L-LAAF performs well, particularly in final time $t_f$, but exhibits higher errors in control and velocity states ($x_3$, $x_4$). In contrast, **Tanh** shows the highest error in control and final time, suggesting less adaptability to dynamic conditions.
+RAAF yields the lowest MSE across most variables, especially in control and states $x_1$ and $x_2$, indicating strong learning and generalization. L-LAAF performs well, particularly in final time $t_f$, but exhibits higher errors in control and velocity states ($x_3$, $x_4$). Tanh shows the highest error in control and final time, suggesting less adaptability to dynamic conditions.
 
-We also compare the number of function evaluations and the total training time required for each activation:
+The RAAF result for the scalar trajectory optimization problem also supports this picture: on the scalar problem, RAAF achieves a total loss of $\mathcal{L} = 4.19 \times 10^{-5}$ and RMS errors of $6.54 \times 10^{-5}$ (state) and $5.84 \times 10^{-5}$ (costate), substantially lower than the Tanh baseline ($\mathcal{L} = 1.038 \times 10^{-4}$, RMS $2.44 \times 10^{-3}$ and $3.64 \times 10^{-3}$). The relevant RAAF trainable-parameter budget for the scalar problem is
+
+| Layers | No of Weights | No of Biases | RAAF Parameters | Total Parameters |
+|:-------|:-------------:|:------------:|:---------------:|:----------------:|
+| I/P to Hidden Layer | $1 \times 20 = 20$ | $20$ | $20 \times 3 = 60$ | $20 + 20 + 60 = 100$ |
+| Hidden to O/P Layer | $20 \times 2 = 40$ | $2$ | $0$ | $40 + 2 + 0 = 42$ |
+| **Total** | $60$ | $22$ | $60$ | $142$ |
+
+: Trainable Parameters per Layer (RAAF) {#tbl-ch3-trainable-raaf}
+
+giving a total of $142$ trainable parameters for RAAF against $338$ for the Tanh baseline on the scalar problem.
+
+The qualitative picture of the PINN solution is illustrated in @fig-ch3-raaf-solution and the comparison of total errors is shown in @fig-ch3-error-comparison.
+
+![PINNs Solution using RAAF](Chapter3_imgs/comp_tah_rowdy.png){#fig-ch3-raaf-solution width="75%"}
+
+::: {#fig-ch3-error-comparison layout-ncol=2}
+![Total Error: Tanh.](Chapter3_imgs/tanh_error.png){#fig-ch3-tanh-error}
+
+![Total Error: RAAF.](Chapter3_imgs/RAAF_error.png){#fig-ch3-raaf-error}
+
+Comparison of the Total errors.
+:::
+
+#### Computational Cost
+
+The number of function evaluations and the total training time required for each activation are summarized below:
 
 | Metric | Tanh | L-LAAF | RAAF |
 |:-------|-----:|-------:|-----:|
@@ -531,40 +408,128 @@ We also compare the number of function evaluations and the total training time r
 
 : Comparison of Function Evaluations and Training Time {#tbl-ch3-fe-time}
 
-Tanh and L-LAAF are computationally cheaper, requiring fewer function evaluations and less training time. In contrast, RAAF takes significantly longer to train, likely due to the complexity of its adaptive mechanism. Despite the higher computational cost, RAAF delivers superior accuracy, indicating a trade-off between computational expense and learning performance. The choice of activation function thus plays a crucial role in determining both learning accuracy and computational efficiency. While RAAF achieves the best accuracy, it comes with greater complexity, whereas L-LAAF offers a balanced trade-off and Tanh serves as a baseline with minimal computational demand.
+Tanh and L-LAAF are computationally cheaper, requiring fewer function evaluations and less training time. RAAF takes significantly longer to train, reflecting the additional complexity of its adaptive mechanism. The relative computational expense can be expressed as the ratio of training time against the Tanh baseline:
 
-### Simplified LTS Model with Trainable Parameters
+$$
+\text{Training-Time Ratio}
+=
+\frac{T_{\text{activation}}}{T_{\text{Tanh}}}.
+$$
 
-In the original trajectory optimization framework using LTS, the control input $u$ is computed indirectly from the costate variables, derived from Pontryagin's Maximum Principle. Specifically, the optimal control law is given by:
+Applied to the absolute numbers above, RAAF incurs a training-time ratio of approximately $5.93\times$ over Tanh ($4637.72/782.23$), while L-LAAF incurs a ratio of approximately $1.36\times$ ($1062.65/782.23$). Despite its higher computational cost, RAAF delivers superior accuracy, indicating a clear trade-off between computational expense and learning performance. The choice of activation function thus plays a crucial role in determining both learning accuracy and computational efficiency: while RAAF achieves the best accuracy, it comes at greater cost, whereas L-LAAF offers a balanced trade-off and Tanh serves as a baseline with minimal computational demand. The absolute wall-clock times reported above are hardware-dependent and should therefore be interpreted through the relative ratios above rather than as standalone figures.
+
+## Parameterized PINN Solutions for ODEs
+
+In many engineering applications, the goal is not to solve a single trajectory optimization problem but to generate solutions for an entire *class* of problems that differ only in their parameters. In the LTS setting, for example, the terminal condition $x_2(t_f)$ may vary over a range, the initial state may be perturbed, or constants appearing in the dynamics may take different values. Each such parameter choice defines a separate two-point boundary value problem whose accuracy depends strongly on the initial guess supplied to the nonlinear optimizer. PINNs offer a natural way to amortize this cost: once a network has been trained for one parameter value, its weights encode information about the solution structure that can be reused to initialize the next instance.
+
+### Problem Parameterization
+
+A trajectory optimization problem is parameterized when one or more of its defining quantities is allowed to vary. Typical examples include the initial state $\mathbf{x}_0$, the terminal state $\mathbf{x}(t_f)$, the constants appearing in the governing dynamics, or auxiliary quantities such as the time horizon. In the TPBVP formulation of an indirect method, each such parameterization changes both the boundary conditions and, through the costate transversality conditions, the shape of the optimal trajectory. In the PINN setting, this corresponds to retraining the network on a different set of residual and boundary losses. Solving each instance independently is computationally prohibitive when thousands of trajectories are required; the techniques developed in the remainder of this section aim to reduce that cost by transferring information across instances.
+
+### Weight Initialization and Interpolation
+
+The key observation underlying all the techniques in this section is that, when problem parameters change only slightly between instances, the optimal network weights of one instance provide a useful starting point for the next. After successfully training the network for a base case (e.g., with $x_2(t_f) = 5.0$ in the LTS problem), the trained weights are saved. They capture meaningful features of the underlying dynamics corresponding to that boundary condition, and can be reused — directly or after a simple extrapolation — to initialize the network for a slightly perturbed instance. This reuse significantly reduces the number of iterations required for convergence: the network adapts quickly to the new scenario since the dynamics remain similar, and the pre-trained weights already encode a near-optimal structure of the solution.
+
+This idea generalizes the random-walk strategy used in earlier work on the LTS problem [@izzo2017survey]: for a range of perturbations in $x_2(t_f)$, a linear interpolation of weights from nearby trained cases was used to generate initial guesses, and these interpolated weights provided good initialization even in untrained regions of the parameter space, again accelerating convergence and improving training stability. Instead of solving each variation from scratch, which is computationally intensive, the PINNs leverage prior knowledge through this weight-transfer strategy. This greatly enhances training efficiency and enables real-time adaptability in solving trajectory optimization problems such as the LTS, as illustrated in @fig-ch3-interpolation.
+
+![Weight Initialization and Interpolation](Chapter3_imgs/inter_process.PNG){#fig-ch3-interpolation width="75%"}
+
+#### Three Initialization Strategies
+
+For a parameterized problem in which the parameter $x$ changes by $\Delta x$ from one instance to the next, three initialization strategies are explicitly distinguished.
+
+**Case 1 — No warm start.** The new instance is solved without using the previous instance's weights: the network is initialized from random weights and trained to convergence. This is the most expensive option, since no information is transferred across instances.
+
+**Case 2 — Izzo zeroth-order extrapolation.** The approach followed by Izzo et al. assumes that the weights at the new parameter value are approximately equal to the weights at the previous parameter value:
+
+$$
+W(x+\Delta x) \approx W(x).
+$$
+
+This is a *zeroth-order* extrapolation: it transfers only the function value, without any derivative information. It typically yields a useful but coarse initialization.
+
+**Case 3 — Proposed first-order extrapolation.** The thesis proposes a *first-order* extrapolation that additionally uses the local sensitivity of the weights with respect to the parameter:
+
+$$
+W(x+\Delta x)
+\approx
+W(x)
++
+\Delta x
+\frac{\partial W}{\partial x}.
+$$
+
+This first-order approximation captures the leading-order change in the optimal weights when the parameter changes, and is expected to provide a closer initialization than the zeroth-order alternative. The required sensitivity $\partial W / \partial x$ is obtained from the trained network and the corresponding parameter perturbation; its exact form follows the implementation in the thesis code.
+
+**TODO — quantitative comparison.** A side-by-side numerical comparison of the three strategies (no warm start vs. Izzo zeroth-order vs. proposed first-order) in terms of training iterations, function evaluations, and wall-clock time is *not yet available* in the current results and is reserved here as a TODO item. The expected quantitative summary, to be filled in once the corresponding experiments are run, takes the form
+
+$$
+\text{Speedup}
+=
+\frac{T_{\text{baseline}}}{T_{\text{method}}},
+\qquad
+\text{Time Saving}
+=
+\frac{T_{\text{baseline}}-T_{\text{method}}}{T_{\text{baseline}}}\times 100\%,
+$$
+
+where $T_{\text{baseline}}$ is the training time without warm starting and $T_{\text{method}}$ is the corresponding time under either the zeroth-order or first-order strategy. Reporting relative savings, rather than absolute wall-clock times, makes the comparison largely hardware-independent, which is important because the absolute timings depend on the underlying machine.
+
+#### Recursive Weight Interpolation Procedure
+
+The interpolation approach used in this work is based on perturbing the final state condition $x_2(t_f)$ and exploiting the learned weights to extrapolate weights for further perturbations.
+
+The first perturbation is applied with $\Delta x_2(t_f) = -0.1$, i.e., $x_2(t_f) = 4.9$. The network for this modified final state is initialized using the base weights (corresponding to $x_2(t_f) = 5.0$) and trained with the same stopping criterion as the base model. The loss drops below $10^{-4}$ within approximately 300 iterations, indicating that the base weights significantly accelerated convergence. The network successfully adapted to the new final state with a much smaller error compared to training from scratch.
+
+Once the network is trained for the perturbed final state $x_2(t_f) = 4.9$, the interpolation process is extended recursively to generate weights for additional perturbations. The core idea is to use a linear interpolation formula to predict new weights:
+
+$$
+w_{\text{new}} = m \cdot x_{2\text{(tf,new)}} + b,
+$$ {#eq-ch3-interpolation}
+
+where
+
+$$
+m = \frac{w_2 - w_1}{x_{2\text{(tf,2)}} - x_{2\text{(tf,1)}}}, \quad b = w_1 - m \cdot x_{2\text{(tf,1)}}.
+$$ {#eq-ch3-interpolation-slope}
+
+The weights corresponding to $x_2(t_f) = 5.0$ and $x_2(t_f) = 4.9$ are used to extrapolate the weights for $x_2(t_f) = 4.8$. After verifying the performance of the network at $x_2(t_f) = 4.8$, the weights for $x_2(t_f) = 4.9$ and $4.8$ are used to extrapolate for $x_2(t_f) = 4.7$, and so on. This recursive interpolation continues by always using the most recent two trained or extrapolated weight sets, i.e.,
+
+$$
+\text{Use } (w_{x_2 = 4.8}, w_{x_2 = 4.7}) \rightarrow w_{x_2 = 4.6}, \quad \text{and so on,}
+$$ {#eq-ch3-recursive}
+
+until the final state condition $x_2(t_f) = 4.0$ is reached. A similar process is carried out in the forward direction. After training the network at $x_2(t_f) = 5.1$, the weights corresponding to $x_2(t_f) = 5.0$ and $5.1$ are used to extrapolate for $x_2(t_f) = 5.2$, and this forward recursive interpolation is repeated until $x_2(t_f) = 6.0$ is reached. At each step, the accuracy of the interpolated weights is evaluated by comparing them with weights obtained through direct training for the corresponding final state condition.
+
+::: {#fig-ch3-interpolation-results layout-ncol=2}
+![Number of Function Evaluations.](Chapter3_imgs/ppt_FE_intre.png){#fig-ch3-fe-eval}
+
+![Time for Training.](Chapter3_imgs/ppt_time_intre.png){#fig-ch3-train-time}
+
+:::
+The recursive weight-interpolation procedure just described is a specific instance of the zeroth-order transfer strategy of @fig-ch3-interpolation-results. It illustrates, on a single parameter ($x_2(t_f)$), how the same trained network can be repurposed across many nearby instances at low cost.
+
+Even with this warm-starting strategy, however, the estimated computational cost of generating the full training dataset required by downstream applications remains substantial. This motivates the physics-informed simplification discussed next, in which the known functional form of the optimal control is built directly into the network.
+
+## Simplified LTS Model with Trainable Parameters
+
+In the original trajectory optimization framework using LTS, the control input $u$ is computed indirectly from the costate variables through Pontryagin's Maximum Principle:
 
 $$
 u(t) = \tan^{-1}\left(\frac{\lambda_4(t)}{\lambda_3(t)}\right)
 $$ {#eq-ch3-original-control}
 
-This requires the neural network to output not only the state variables $x(t), y(t), u(t), v(t)$, but also the costate variables $\lambda_1(t), \lambda_2(t), \lambda_3(t), \lambda_4(t)$, resulting in a total of 8 outputs.
+This requires the neural network to output not only the state variables $x(t), y(t), u(t), v(t)$ but also the costate variables $\lambda_1(t), \lambda_2(t), \lambda_3(t), \lambda_4(t)$, resulting in a total of eight outputs.
 
-**Proposed Approach:**
-
-We propose a simplified and more efficient formulation that avoids predicting costate variables altogether. Leveraging the analytical structure of the LTS problem, the optimal control $u(t)$ is known to follow the form:
+The simplified formulation avoids predicting costate variables altogether. Leveraging the analytical structure of the LTS problem, the optimal control $u(t)$ is known to follow the form
 
 $$
-u(t) = \tan^{-1} \left( \frac{c_1}{c_2} + \frac{c_3}{c_2} t \right)
+u(t) = \tan^{-1} \left( \frac{c_1}{c_2} + \frac{c_3}{c_2} t \right),
 $$ {#eq-ch3-simplified-control}
 
-Here, $c_1, c_2, c_3$ are problem-dependent constants. In the proposed method, we treat these constants as *trainable parameters* within the neural network. The network now only needs to output the 4 state variables.
+where $c_1, c_2, c_3$ are problem-dependent constants. In the simplified model, these constants are treated as *trainable parameters* of the network, so that the network only needs to output the four state variables. The control input $u(t)$ is then computed using the parameterized control law in @eq-ch3-simplified-control, bypassing the need to estimate costates. The constants $c_1, c_2, c_3$ are learned alongside the network weights during training. During forward passes, $u(t)$ is computed directly from the equation using the current value of time $t$ and the learned parameters.
 
-The control input $u(t)$ is computed using the parameterized control law in Equation, bypassing the need to estimate costates.
-
-**Advantages of This Simplification:**
-
-- **Reduced Network Complexity:** By eliminating the need to predict costates, the network output size is halved—from 8 outputs to 4.
-- **Improved Training Efficiency:** With fewer outputs and a structured control law, the learning problem becomes easier to optimize.
-- **Faster Convergence:** The model converges faster due to fewer trainable outputs and the use of domain-specific knowledge embedded in the control law.
-- **Interpretability:** The learned parameters $c_1, c_2, c_3$ provide insights into the structure of the optimal control, enhancing model transparency.
-
-The constants $c_1, c_2, c_3$ are learned alongside the network weights during training. During forward passes, $u(t)$ is computed directly from the equation using the current value of time $t$ and the learned parameters.
-
-This approach tightly couples the control structure with the known analytical solution form, reducing the burden on the network and improving generalization. It exemplifies how hybridizing physics-based insight with learning-based models can yield both performance and interpretability benefits.
+This physics-informed choice has three concrete consequences that the experiments quantify. First, by eliminating the need to predict costates, the network output size is halved — from eight outputs to four — which reduces the required network size. Second, the resulting smaller network requires less computational training time. Third, as a result of the first two effects, the simplified model remains accurate on the states while drastically reducing the control error, as shown in the comparison below.
 
 | Metric | RAAF | Simplified LTS: RAAF |
 |:-------|-----:|---------------------:|
@@ -577,10 +542,22 @@ This approach tightly couples the control structure with the known analytical so
 
 : Error comparison between original RAAF and Simplified LTS: RAAF model. {#tbl-ch3-simplified}
 
-The simplified LTS model maintains low state errors while significantly reducing the control error. Notably, the training time of the simplified model is $2276.0\,\text{s}$, which is approximately half that of the original RAAF model. Additionally, the number of function evaluations is reduced to $57477$, highlighting the efficiency of the proposed approach. This trade-off between model simplicity and performance effectively reduces network complexity and improves computational efficiency without compromising accuracy.
+The simplified LTS model maintains low state errors while significantly reducing the control error. To compare the training-time savings in a hardware-independent manner, the absolute times are converted into a ratio against the original RAAF model:
 
-### Limitations with the PINNs Method for OCP
+$$
+\text{Training-Time Ratio}
+=
+\frac{T_{\text{simplified}}}{T_{\text{original}}}
+=
+\frac{2276.0}{4637.72}
+\approx
+0.491,
+$$
 
-As the number of states increases in an optimal control problem—for instance, from four to five by including an additional state such as the pitch angle and its corresponding ODE—the total loss during PINN training has been observed to diverge. This divergence is largely due to the added complexity introduced by the additional differential constraints, which significantly increases the number of residual terms the network must learn to satisfy. Each new state variable contributes both a state ODE and its associated costate equation in the Hamiltonian formalism, effectively doubling the number of ODE constraints. Consequently, the loss function becomes composed of many competing objectives, such as the state dynamics, costate dynamics, and boundary/initial conditions, which can conflict during Optimization.
+which corresponds to a time saving of approximately $50.9\%$. Additionally, the number of function evaluations is reduced to $57477$ (against $57871$ for the original RAAF), further confirming the efficiency of the proposed approach. This trade-off between model simplicity and performance reduces network complexity and improves computational efficiency without compromising accuracy, and exemplifies how hybridizing physics-based insight with learning-based models can yield both performance and interpretability benefits.
 
-This issue has been identified in the literature as a major limitation in PINN-based methods for optimal control. Mowlavi and Nabi [@mowlavi2022] highlighted that in PDE-constrained optimal control problems, the presence of multiple differential constraints—especially when each comes with a state and costate component—can destabilize training due to the imbalance in the loss function. Similarly, Barry-Straume et al. [@barry2022controlpinns] observed that as more equations are embedded into the PINN loss (e.g., due to additional state variables), the learning dynamics degrade, resulting in either stagnation or divergence of the total loss. Moreover, New et al. [@new2022] showed empirically that increasing the number of coupled ODEs, even in relatively simple settings, leads to poor convergence behavior due to the ill-conditioning of the Optimization landscape and vanishing or exploding gradients.
+## Limitations
+
+As the number of states increases in an optimal control problem — for instance, from four to five by including an additional state such as the pitch angle and its corresponding ODE — the total loss during PINN training has been observed to diverge. This divergence is largely due to the added complexity introduced by the additional differential constraints, which significantly increases the number of residual terms the network must learn to satisfy. Each new state variable contributes both a state ODE and its associated costate equation in the Hamiltonian formalism, effectively doubling the number of ODE constraints. Consequently, the loss function becomes composed of many competing objectives — state dynamics, costate dynamics, and boundary/initial conditions — that can conflict during optimization.
+
+This issue has been identified in the literature as a major limitation in PINN-based methods for optimal control. Mowlavi and Nabi [@mowlavi2022] highlighted that in PDE-constrained optimal control problems, the presence of multiple differential constraints — especially when each comes with a state and costate component — can destabilize training due to the imbalance in the loss function. Similarly, Barry-Straume et al. [@barry2022controlpinns] observed that as more equations are embedded into the PINN loss (e.g., due to additional state variables), the learning dynamics degrade, resulting in either stagnation or divergence of the total loss. New et al. [@new2022] further showed empirically that increasing the number of coupled ODEs, even in relatively simple settings, leads to poor convergence behavior due to the ill-conditioning of the optimization landscape and vanishing or exploding gradients.

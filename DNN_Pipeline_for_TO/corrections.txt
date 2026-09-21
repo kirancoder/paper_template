@@ -1,0 +1,114 @@
+[Speaker 1]
+Making trough.
+
+It will be 27th of. From here, just scroll down.
+
+Direct meters indirect method. Remove this.
+
+Formulation.
+
+Thanks for support.
+
+To know the results. Because there's no reason noises. Okay, this solution. And make this experiments with activation function and plug this together.
+
+So in the pin Solutions. That as you move to pin Solutions. Oh, and then next 2.2 3.2.2 maybe experiments with activation function. That's all, and the Rowdy, Etc details will come there.
+
+Here you have pins method. Here you have pin submissions. So, we are anyway giving. We are so many music pins, right? So, there is, is there a need for a section there? So, we, at this section itself? You define the problem, then you define the you step. Define the pins loss function. And then you would have shown the results with tanage. Okay. And then only 3.2.1 will be experiments with activation function. And then you show the. Better results. So unnecessary. A lot of sections are created, so basically this is essentially four pages. Okay, six finish starts at 30 engine 35, five wages.
+
+So here. Now, this weights, initialization and interpolation. And this is all this. It is basically independent of whether which this problem you solve or this problem you solve. So, you move it back to 3.4. Okay, so, and you call it as. Here you are solving one, one problem. What happens if I have to generate data? And I have to solve a class of problems, and that's where the weights, initialization, and interpolation etcetera is coming in. Okay, right? So, uh, new subsection, huh? What you could do is you could say solving.
+
+Od Solutions using? Pins. Is 3.2, then 3.2.1. Is scalar trajectory optimization problem? Okay? In that. Uh, you do that then. 3.2.2 is experiments with activation function. Have you solved linear relationship saying with tenants or Audi? Okay, so then basically what you do is first you give scalar trajectory optimization problem. Then you give three point two point two is linear the engine steering problem. You talk about experiments with? Activation function that is applied to a single that is applicable to a solution of a single ODE where we are trying to do the accuracy.
+
+Yeah, yeah, 3.3 is basically. Parametric name means solution for parameterized release. So, but it's all parameterized. Okay, it is parameterized. It is parameterized by initialization. Condition is basically between this and this, so that is a parameter.
+
+Constants in the equation have to change. Initial conditions or final conditions. In tpvp, they both are, you know, changing in a certain range that is also parameterization. Then parameterized pin solution for parameters ODS, so make the ah. There, you first explain the problem. Generating the data, and what will happen. So there, we want as accuracy as possible, and less computation is possible. And um, accuracy for that. For the overall accuracy, we have already seen referred to the earlier section. We have done the Ravi. As well as competition, cost is concerned. It highly depends on, I mean, since this being a non-linear optimization problem, it highly depends on the initial guess.
+
+And then you would have Quantified the. Um. Advantage. The computational Advantage that you get by warm starting, so solve a problem without oversorting and then solve a problem with warm starting and then. Ratio and give this percentage of. Okay, computational time is saved. Right, so then you, then you multiply it by the number of trajecies that you intend to create. And there you mention so much time has been. Um, I didn't say now. In the weight initialization, you first refer to.
+
+Well, he has taken random walk. Okay, so Izzo has already. However, ISO has only.
+
+It was done this thing. I mean, this has been only done in classical methods. Where they are solving kbb. Yeah, but this also can be replicated in using while we solve machine learning. Yeah, using things, yeah. Uh, using pins. Also, uh, Izzo has done. Zeroth order. Uh, extrapolation. And we have done better than that. So?
+
+If I have a function? Like this, I will write this as. Getting the x into Delta X into? And Away by double X Plus h o? T. Okay, so if I assume that the weights at X Plus DX? R equal to weights at X. That is, what is iso doing warm starting? This is basically zeroth order.
+
+And what you are doing is basically weights at X Plus delta DX X X Plus. Delta X is equal to weights at X Plus Delta X transpose into. Gradient of? Wx. And we are doing first order information. Extrapolation. Okay, so you will have to give numerical results. For firstly. And then. First order of homes, right, and compare the computational effort? Okay, now I'm actually thinking now that we have put it in this, I think we should. We will publish it. Okay, so you finish all of this. Okay, um, so, and use this terminology, okay, and? This latex is here, right? Yeah, you upload the latex. Also, the price and we will. We will submit it. We will not maybe submit it to very Hi-Fi General, but we will. Military General will be submit. Okay. So this itself, we will try to publish okay, so they so that you have done weights energy, then effect of activation function on the model performance, so that will come natural experimental activation. So, so that will come there. Okay, that is in line with. Do about the increase in the accuracy for solving a single ODE problem. So that should move up 3.3.3. Okay? Yes, effect of activation function on model performance. So here, effect means you are talking about computational cost.
+
+It's like the accuracy we want to increase. We want to use the best. Yeah, so then basically here itself that this discussion we should have come here around three point when you. When you are talking about introducing Rowdy?
+
+Actually in that problem only. We enter the routes, so here. It's like radian draft, so I didn't mention.
+
+Here, it's applied for this this. Um, LTS. So you want more? You want me to move into? Now, the flow has changed now. Okay, so now you will have 3.2.1 as scalar 3.2.2 as linear tangent steering, and then we'll come experiments with activation functions, okay, okay, and in the experimental activation function you say. Firstly, we saw the earlier scalar tangential scalar triangle activation problem and look at the results of rough then, so it works.
+
+And in that section, then this will also come. Okay, all of the that things are coming. They will come here also. Now, then simplified radius model for with tradable parameters. What is this that is like extra 10 volt parameters we are adding on as we know, the functional form of the U control. Ah, okay, that comes with separate section like.
+
+So, we have to write this paper as.
+
+Yeah. So? At the end of this. Initialization and interpolation, which. You've done all the these things, and you would have. Compared the computational performance of all three approaches you will say even with this. Uh, the estimated computational cost for required for generating the required trading data is prohibitive. Uh, so. We should. So, we want to reduce the train time even further. Uh, so in cases where the solution. Form is available. Or can be an inclusion. Guess can be made. Um, one should use parameterized.
+
+Solution. Parameter spins. Parameter experience.
+
+Okay, this is simplified. If the functional form of U is known, then it can be represented. Yeah, so, so?
+
+Yeah, so.
+
+So earlier, we have concluded that this is still very primitive. Okay. Then you say.
+
+If an intelligent guess. From the physics of the problem of? In essay T's head answers.
+
+On the size of the solution is known. Then. That show that should be used.
+
+And that will reduce the number of.
+
+That will reduce the number of outputs of the network considerably, thereby reducing the required Network size considerably, thereby reducing the computational training time considerably. And that is. Show here. And again, bullets remove all these bullets. What is this?
+
+And then you should accuracy. And computational cost. Where is computational cost so that also should be okay? Okay, so you don't. So this? Numbers is fine. Finally, there has to be a ratio or percentage. Okay, that is what is most important. Because if numbers depend on the hardware that you're using.
+
+And the limitations. Okay, that is fine. This is fine. You, you have basically. What is, what are the limitations that you mentioned here so that one is that? Computing. Computing objective functions that it has, so that will blow up the gradient to destabilizing the training due to imbalance of loss function. More number of additional state variables.
+
+So, one paper way we can write. We can take our own problem and explore all. Methods, even LTS or not, and can write a review paper. This. This problem this method has this problems. This method has this problem. Method means which methods so, like, direct method, first upload physical methods and show that they say the problem. Then, we take machine learning approaches this problem, then TFC, and then we can also add admm like. I haven't seen any paper like that where all the methods are explained on one single thing.
+
+So here, the external that is required is. Our DFC implementation and!
+
+Yeah. Which will be really good? In terms of? Even if it's a review paper. Yeah. Before we will see submit it, you can upload it on our side, then for your purposes, whether it is published or not, it's on Arc site so that you can obviously code to and for your applications. So, one more thing? Uh, flaws, which I noticed in my research is. The thing is for. Even for different activation functions, we need to do the hyperparameter tuning again. And make sure that the number of parameters are less than the. The number of parameters are less than. I've increased the. I will go for laugh or laugh. The number of parameters are less, as network is more expressive. Showing that. So there, we need to do that. So, so select the number of layers and number of neurons. Yeah.
+
+So, you stop giving.
+
+I didn't realize that you're still active because all three others are left, right? So?
+
+Ah, same number of parameters.
+
+So, if if we, if we do hyper parabolic training for tarage and use the same architecture for Rowdy graph? Uh, you will have a bigger Network, which is not required. But still, if you're able to train it, it will give better results, right? It is giving better results. But it will give the same same level of residence, even with a small Network first. That is what you mean, right? It is more expressive. It is because you have readable parameters in the activation function itself. Yeah, so that, and so we, what you're saying is, you need to compare the results with equal number of trainable parameters and that he has done in that paper most in the paper we read for rocket.
+
+And like, some really long paper there.
+
+Okay, let us start writing the window. And once, we because. Let's start running with. The message is going to be one finally.
+
+Machine learning.
+
+In some cases, or it is never required. Is better. It is. Profile will come for that online, like guessing of. Even if you want to generate trajectories. I'm guessing off the coast rate? Machine learning does a better job. Manually doing it. We are doing most culture. If you're not doing on shots, it doesn't need actually the PC.
+
+Right. First problem, at least, you're able to solve in the classical method. The first solution on the first problem we have to. Give a good guess. So that is one advantage of machine learning. Essentially, you're solving a non-linear optimization problem in machine learning areas in classical methods. You are not solving an optimization problem, so they are way, way fast.
+
+So, you know, in the time that he in which you are training the network, you could run your TPP with. I don't know. You have to find the ratio you can run it with 100 different initial cases.
+
+So? The advantage? Now, that is one thing is. You know?
+
+One is wall clock time, and then there is. What is it called? Cpu type, okay? So, see new. Time might be large for machine learning. But vocal time may come down substance. So, as the hardware becomes more and more sophistic, powerful. Difference between basically running? Trajectory optimization problem as a classical and network of the pins based the wall clock time may be exactly the same. Oh, that's one of them. So, basically, you know? I was growing up. Opening X used to be a luxury. When I was a student? Now, Computing power is so powerful that X we don't give a care. So we, when we used to in my thesis when I given the computational time. I will shut down everything all the X and I will work on that. Console only. And then we will compute. So all the papers used to, you know, report that time because X, once you in load the graphics on the computer. Because they were so slow. Now, that is not never, ever, done, actually. Things are so much faster now, so that so we might have to so okay, so we can talk about wall clock time now. Also, the development time.
+
+Okay, so TV, we will have to. Our developer specialized solver. Or OD solution. So, it is like, basically, shooting methodology, right?
+
+I don't think so. It's like, we are not accepting anything. So, we are just proposing a new method. Hoping that the currency will increase.
+
+You know, development in this field increases.
+
+Yeah. But when you're writing a review paper, it has to have a message. It can be neutral. So, you can say this has these good things. These are these good things. This is this bag as well, fine, but a neutral. Uh, people then has to have a lot of. Uh, review. So in your, then you know the classical methods you have covered all the only the basics? These are the basic. Then come? Compact version of herbide Simpson that you you have not done where X is root as it is. Eu is there? Methods. Okay, so the review member? Un department. More depth. For acceptance, I think.
+
+At least we will write it because it will be immediately. Not able to publish it. You might. I mean, if you won't know, you can always, always. There's no issue.
+
+Um, so even if you are not able to try able to publish it? You for your purposes. This, that will be the good thing that paper will upload on my hard side, and then, therefore, that depending on this. Okay. To finish this and then online. We will download the report. Once we have done that, I don't know. Upload the latex code. And then I will create the first start of the paper that I discussed. Did you remember you need more workflow and review before you start writing? I will write this way.
+
+Fully.
+
+Yeah, that'll be pretty good.
+
+So, when you are living today?

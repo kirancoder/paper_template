@@ -1,8 +1,8 @@
 # General Methods to Solve Trajectory Optimization Problem
 
-During the course of this research, a thorough investigation of direct methods for optimal control is undertaken, with a focus on their formulation and application to dynamic systems. The effectiveness of these methods is critically assessed, followed by an exploration of potential enhancements to improve solution accuracy and computational efficiency. Specifically, the study examines various discretization schemes, such as the Trapezoidal and Hermite-Simpson methods, and investigates how modifications in the formulation, including the introduction of regularization terms, can reduce computational errors and yield more optimal trajectories.
+Trajectory optimization problems are typically solved using two broad families of numerical approaches: discretization-based *direct transcription* methods, which approximate the optimal control problem by a finite-dimensional nonlinear program, and *indirect* methods, which reformulate the problem via the Pontryagin Maximum Principle (PMP) into a two-point boundary value problem (TPBVP) that must be solved numerically. This chapter reviews both families and applies them to a classical benchmark problem in order to expose their respective strengths and limitations. The motivation for this review is twofold. First, it establishes the classical optimization background against which the Physics-Informed Neural Network (PINN) approaches of Chapter 3 are later compared. Second, it makes explicit the TPBVP and state–costate formulation that PINNs are used to solve in later chapters.
 
-## Direct Method
+## Discretization-Based Direct Transcription
 
 Direct methods for solving optimal control problems (OCPs) involve transcribing the continuous-time problem into a finite-dimensional nonlinear programming problem (NLP). This is achieved by discretizing the time horizon and approximating both the system dynamics and the cost functional at discrete time points.
 
@@ -98,9 +98,9 @@ $$ {#eq-ch2-hs-bounds}
 
 The H-S method achieves higher-order accuracy compared to lower-order schemes like the trapezoidal method by incorporating interpolated midpoints in both the cost and dynamic constraints. This enhanced accuracy makes it especially effective in problems with nonlinear or rapidly varying dynamics.
 
-### Linear Tangent Steering Problem {#sec-ch2-lts}
+## Linear Tangent Steering Problem {#sec-ch2-lts}
 
-The Linear Tangent Steering (LTS) problem [@bryson2018applied] is a classical optimal control problem that involves steering a system governed by nonlinear dynamics to a specified final state while minimizing the total control time. It serves as a standard benchmark for testing the performance of numerical optimization techniques.
+The Linear Tangent Steering (LTS) problem [@bryson2018applied] is a classical optimal control problem that involves steering a system governed by nonlinear dynamics to a specified final state while minimizing the total control time. It serves as a standard benchmark for testing the performance of numerical optimization techniques throughout this thesis.
 
 The objective is to minimize the total time $t_f$ required to reach a desired final position from a given initial condition:
 
@@ -108,9 +108,7 @@ $$
 J = \int_0^{t_f} 1 \, dt = t_f
 $$ {#eq-ch2-lts-obj}
 
-#### Dynamic Constraints
-
-The system is defined by four states: $x_1$ and $x_2$ (position components), and $x_3$, $x_4$ (velocity components). The dynamics are governed by the following equations:
+**Dynamic Constraints.** The system is defined by four states: $x_1$ and $x_2$ (position components), and $x_3$, $x_4$ (velocity components). The dynamics are governed by the following equations:
 
 $$
 \begin{aligned}
@@ -123,9 +121,7 @@ $$ {#eq-ch2-lts-dynamics}
 
 where $a$ is a constant acceleration magnitude, and $u(t)$ is the control input representing the steering angle.
 
-#### Boundary Conditions
-
-The problem is subject to the following initial and terminal boundary conditions:
+**Boundary Conditions.** The problem is subject to the following initial and terminal boundary conditions:
 
 $$
 \begin{aligned}
@@ -150,9 +146,9 @@ Analytical solution
 
 This analytical solution, derived without numerical approximations, provides a valuable reference for assessing the accuracy and convergence of transcription-based methods such as the Hermite–Simpson method. For detailed derivations and analytical formulations, refer to [@bryson2018applied].
 
-While the analytical solution offers exact results for this benchmark problem, it is not always feasible for more complex systems or constraints. Therefore, a numerical optimization approach is employed to approximate the optimal trajectory using transcription techniques, which can be generalized to a broader class of problems.
+While the analytical solution offers exact results for this benchmark problem, it is not always feasible for more complex systems or constraints. Therefore, numerical optimization approaches are employed to approximate the optimal trajectory using the two direct transcription techniques introduced earlier, which can be generalized to a broader class of problems.
 
-#### Numerical Optimization Setup
+### Numerical Optimization Setup
 
 To numerically solve the LTS problem, the continuous-time optimal control problem is transcribed into a finite-dimensional NLP problem using direct collocation methods. The resulting NLP is solved using the Sequential Least Squares Quadratic Programming (SLSQP) algorithm, implemented via the `scipy.optimize.minimize` function in Python.
 
@@ -195,7 +191,7 @@ These bounds ensure, for example, that horizontal positions and velocities remai
 **Solver Settings:**
 The optimization solver is configured with specific parameters to ensure robust and accurate convergence. The `SLSQP` (Sequential Least Squares Quadratic Programming) algorithm is employed as the optimization method. A high maximum iteration limit is set via `maxiter=10000`, providing ample opportunity for convergence. The gradient tolerance is configured with `gtol=1e-10`, ensuring that the solution satisfies the first-order optimality condition with high precision. Additionally, `disp=True` enables real-time display of the solver's progress and convergence messages. These settings collectively help balance computational cost and accuracy, which is crucial for problems involving sensitive dynamic constraints and tight boundary conditions.
 
-### Solution using Trapezoidal Method
+### Solution using the Trapezoidal Method
 
 Following the numerical setup, the transcribed NLP is solved using the trapezoidal collocation method. The solver returns the optimal control $\tilde{\mathbf{u}}$, the corresponding state trajectories $\tilde{\mathbf{x}}_1, \tilde{\mathbf{x}}_2, \tilde{\mathbf{x}}_3, \tilde{\mathbf{x}}_4$, and the optimal final time $t_f$.
 
@@ -233,7 +229,7 @@ While the state and control trajectories broadly follow the expected profiles, t
 
 To address these limitations, the next section introduces the H-S method offers significantly improved accuracy. This higher-order method is better suited for resolving discontinuities in optimal control problems, including those with bang-bang control structures.
 
-### Solution using Hermite–Simpson Method
+### Solution using the Hermite–Simpson Method
 
 To improve the accuracy and reduce the numerical artifacts observed with the trapezoidal method, the same trajectory optimization problem is now solved using the Hermite–Simpson collocation method. This third-order scheme incorporates midpoint information to more accurately approximate the system dynamics and cost function.
 
@@ -269,7 +265,7 @@ Similar to last method, MSE is computed for each state variable and the control 
 
 To alleviate this issue and promote smoother control profiles, a regularization term can be added to the cost functional. This term penalizes the rate of change in the control input and helps suppress high-frequency oscillations, thereby improving numerical stability and producing more realistic control behavior.
 
-## Regularization Methods
+## Regularization Strategies for Control Smoothing
 
 To promote smoother control profiles and mitigate undesirable oscillations (chattering) in control inputs, a regularization term [@sanchez2016optimal] is often added to the objective function. This term penalizes large variations in the control trajectory by discouraging abrupt changes in the derivative of the control vector $\mathbf{\tilde{u}}$. Such an approach is particularly useful in trajectory optimization problems, where noisy or highly oscillatory controls can be both unrealistic and numerically unstable.
 
@@ -307,7 +303,7 @@ where $J$ is the original objective function (e.g., final time or control effort
 
 Including this regularization term reduces high-frequency content in the control signal $\mathbf{u}$, thereby suppressing chattering and enhancing the numerical stability and physical plausibility of the computed solution.
 
-### Application of Regularization Term to LTS Problem
+### Application to the LTS Problem
 
 To enhance the smoothness of the control input in the LTS (LTS) problem, a regularization term $J_{\text{reg}}$ is added to the objective function. This penalizes abrupt variations in the control trajectory $\mathbf{\tilde{u}}$, reducing high-frequency oscillations and producing a more realistic control profile.
 
@@ -361,19 +357,19 @@ Final optimized trajectories using Hermite–Simpson method, regularization, and
 
 These results confirm that the combined use of regularization and the trust-region method significantly improves both the smoothness and the numerical accuracy of the computed control and state trajectories.
 
-### Limitations of Direct Methods
+### Limitations of Transcription-Based Approaches
 
-Direct methods, especially when enhanced with regularization and robust optimizers, offer practical and reliable solutions for complex trajectory optimization problems. However, they have inherent limitations. Direct transcription approximates state and control trajectories numerically, which can lead to accuracy loss near discontinuities such as bang-bang switches [@sanchez2018real]. Moreover, direct methods do not explicitly expose the necessary conditions for optimality, limiting analytical insight.
+Direct transcription methods, especially when enhanced with regularization and robust optimizers, offer practical and reliable solutions for complex trajectory optimization problems. However, they have inherent limitations. Direct transcription approximates state and control trajectories numerically, which can lead to accuracy loss near discontinuities such as bang-bang switches [@sanchez2018real]. Moreover, direct methods do not explicitly expose the necessary conditions for optimality, limiting analytical insight.
 
 Direct collocation methods, such as the Hermite-Simpson scheme discussed previously, improve stability by enforcing dynamics at multiple points but may require dense discretization to achieve high accuracy, increasing computational cost [@rao2010survey].
 
-These limitations motivate the use of indirect methods, which solve the optimal control problem by directly enforcing the necessary conditions derived from PMP [@bryson2018applied]. Indirect methods can provide higher accuracy near discontinuities and offer deeper analytical understanding of the solution structure.
+These limitations motivate an alternative formulation in which the necessary conditions for optimality are derived analytically and solved numerically. This is the basis of the indirect method presented in the next section, where the optimal control problem is recast as a two-point boundary value problem (TPBVP) using the Pontryagin Maximum Principle (PMP).
 
-## Indirect Method
+## Pontryagin Maximum Principle and the TPBVP Formulation
 
-The indirect method for solving trajectory optimization problems is grounded in optimal control theory, particularly the calculus of variations and Pontryagin's Maximum Principle (PMP) [@sanchez2018real]. This approach transforms the trajectory optimization problem into a boundary value problem (BVP) by deriving necessary conditions for optimality.
+The indirect formulation for solving trajectory optimization problems is grounded in optimal control theory, particularly the calculus of variations and Pontryagin's Maximum Principle (PMP) [@sanchez2018real]. This approach transforms the trajectory optimization problem into a boundary value problem (BVP) by deriving necessary conditions for optimality. The TPBVP that results from this transformation is also the formulation later solved using Physics-Informed Neural Networks in Chapter 3, and is therefore developed in detail here.
 
-### Formulation of the Problem
+### Problem Formulation
 
 Consider a general trajectory optimization problem defined over the time interval $[t_0, t_f]$, where the objective is to minimize a performance index consisting solely of a Lagrangian term:
 
@@ -403,9 +399,7 @@ $$ {#eq-ch2-hamiltonian}
 
 where $\boldsymbol{\lambda}(t) \in \mathbb{R}^n$ is the costate vector, having the same dimension as the state vector $\mathbf{x}(t)$.
 
-#### Derivation of Optimal Control
-
-According to the Pontryagin Maximum Principle (PMP), the optimal control $\mathbf{u}^*(t)$ minimizes the Hamiltonian at every instant:
+**Optimal Control Law.** According to the Pontryagin Maximum Principle (PMP), the optimal control $\mathbf{u}^*(t)$ minimizes the Hamiltonian at every instant:
 
 $$
 \mathbf{u}^*(t) = \arg\min_{\mathbf{u}} H(\mathbf{x}(t), \mathbf{u}, \boldsymbol{\lambda}(t), t).
@@ -419,9 +413,7 @@ $$ {#eq-ch2-control-stationarity}
 
 Solving this stationarity condition yields an explicit or implicit expression for the optimal control $\mathbf{u}^*(t)$ as a function of $\mathbf{x}(t)$, $\boldsymbol{\lambda}(t)$, and $t$.
 
-#### State and Costate Dynamics
-
-Once the optimal control law $\mathbf{u}^*(t)$ is obtained, it is substituted back into the system to define a boundary value problem involving the state and costate trajectories. The dynamics of these variables are given by:
+**State and Costate Dynamics.** Once the optimal control law $\mathbf{u}^*(t)$ is obtained, it is substituted back into the system to define a boundary value problem involving the state and costate trajectories. The dynamics of these variables are given by:
 
 $$
 \dot{\mathbf{x}}(t) = \frac{\partial H}{\partial \boldsymbol{\lambda}} = \mathbf{f}(\mathbf{x}, \mathbf{u}^*, t) \tag{State dynamics}
@@ -433,9 +425,7 @@ $$ {#eq-ch2-costate-dynamics}
 
 These equations are typically coupled and nonlinear, and must be solved simultaneously.
 
-#### Transversality Conditions
-
-To solve the state-costate system as a boundary value problem, appropriate terminal conditions are required. These are provided by the transversality conditions:
+**Transversality Conditions.** To solve the state-costate system as a boundary value problem, appropriate terminal conditions are required. These are provided by the transversality conditions:
 
 - If a terminal cost $\Phi(\mathbf{x}(t_f))$ is present in the objective, then:
 
@@ -455,9 +445,7 @@ $$
 H(t_f) = 0.
 $$ {#eq-ch2-free-final-time}
 
-#### Solving the Optimality System
-
-The complete optimality system consists of:
+**Optimality System.** The complete optimality system consists of:
 
 - The state equations (@eq-ch2-state-dynamics) with initial condition $\mathbf{x}(t_0) = \mathbf{x}_0$,
 - The costate equations (@eq-ch2-costate-dynamics) with terminal boundary condition from the transversality condition,
@@ -467,12 +455,8 @@ This boundary value problem can be solved using numerical techniques such as the
 
 ### Solving the Boundary Value Problem
 
-The system of first-order differential equations formed by the state dynamics, costate dynamics, and optimal control law constitutes a BVP. These equations are solved numerically using methods such as shooting techniques or collocation methods.
-
-#### Limitations of Indirect Method
+The system of first-order differential equations formed by the state dynamics, costate dynamics, and optimal control law constitutes a TPBVP. These equations are solved numerically using methods such as shooting techniques or collocation methods.
 
 The indirect method provides high accuracy since it directly enforces the necessary conditions for optimality. However, it faces several limitations in practical implementation. One major drawback is its sensitivity to the initial guess; solving the resulting boundary value problem (BVP) requires accurate initialization of both state and costate variables, and poor guesses often result in divergence or convergence to suboptimal solutions [@sanchez2018real]. Additionally, the BVP is often numerically stiff, especially in problems involving highly nonlinear or high-dimensional dynamics, which can make shooting methods unstable and sensitive to perturbations.
 
-#### Solving the Costate and State ODEs using Physics-Informed Neural Networks
-
-The system of ODEs for the state and costate variables, along with the associated boundary conditions, can be solved using advanced machine learning techniques such as Physics-Informed Neural Networks (PINNs). PINNs leverage deep learning to approximate the solution to differential equations [@raissi2019physics] by incorporating the governing physical laws (in this case, the system dynamics and costate equations) directly into the training process, which is explored in the next section.
+The system of ODEs for the state and costate variables, along with the associated boundary conditions, can also be solved using advanced machine learning techniques such as Physics-Informed Neural Networks (PINNs). PINNs leverage deep learning to approximate the solution to differential equations [@raissi2019physics] by incorporating the governing physical laws (in this case, the system dynamics and costate equations) directly into the training process, which is explored in the next chapter.

@@ -1,0 +1,50 @@
+VALIDATION – Astrodynamics_Assessment_Answer.pdf
+==================================================
+
+Source content: answer_final(2).md (frozen; coordinate-frame terminology corrected in §1.3)
+  - GCRF and ICRF now distinguished as separate frames (no longer written as GCRF/ICRF)
+  - GCRS→GCRF and ITRS→ITRF system/realization relationships stated
+  - ICRF described as realization of ICRS using extragalactic radio sources
+
+PDF generation workflow: answer_final(2).md -> answer.html (md2html.py) -> Astrodynamics_Assessment_Answer.pdf (LibreOffice writer_web_pdf_Export). Page size A4.
+
+Final PDF page count: 3
+Four-page requirement status: SATISFIED (3 of 4 maximum)
+
+Question 1 fully covered: YES
+  - Mathematical model: §1.1 (two-body -> non-spherical gravity -> drag -> optional higher-fidelity)
+  - Justification: §1.1 (dominant vs secondary effects; practical fidelity, add terms if error exceeds budget)
+  - Sufficiency of six orbital elements: §1.2 (insufficient without epoch/frame/time standard/μ/model/perturbation model/spacecraft+environment)
+  - Additional parameters: §1.2 (required baseline vs optional/higher-fidelity; spacecraft, environment, uncertainty)
+  - Coordinate systems: §1.3 (GCRF, ITRF, RSW; GCRS/ITRS relationship; ICRF as ICRS realization)
+  - Coordinate transformations: §1.3 (perifocal<->inertial; GCRF<->ITRF via precession/nutation, Earth rotation, polar motion, EOP)
+  - Prediction-accuracy methodology: §1.4 (position/velocity/RSW/covariance; numerical, dynamic-model, prediction, uncertainty consistency)
+
+Question 2 fully covered: YES
+  - Closest approach time (TCA): §2.1 (minimize d(t))
+  - Closest approach distance: §2.1 (minimum miss distance)
+  - Numerical method: §2.1 (coarse screening -> bracket -> 1-D local refinement; ρ·v_rel = 0)
+  - Collision/evasive maneuver methodology: §2.2 (10-step workflow)
+  - Constraints/trade-offs: §2.2 (dV, propellant, thrust, timing, attitude, nav/exec error, mission limits, recovery, future conjunctions)
+  - Uncertainty/risk: §2.3 (covariance, Pc, hard-body radius; miss distance != risk)
+
+Assumptions present: YES (§3, seven-item list; no "spherical Earth" contradiction)
+
+Visual inspection completed: YES
+  - Method: pdftotext per-page and full extraction reviewed; page count via pdfinfo.
+  - Clipped text: none found.
+  - Broken equations/symbols: none; ρ, ·, ν, Ω, ω, ΔV render correctly.
+  - Awkward page breaks: §1.3 coordinate-frame bullets flow across page 1->2 boundary (normal paragraph continuation).
+  - Orphan headings: none (all section headings have body text on the same page).
+  - Excessive whitespace: none; layout is dense and within 3 pages.
+  - Formatting inconsistencies: none.
+  - Coordinate frames verified: GCRF (2 occurrences), ICRF (1), ITRF (2), GCRS (1), ITRS (1); no GCRF/ICRF combined form remains.
+
+External sources / citations: NONE introduced beyond the inline IERS references in §1.3 (IERS Technical Note 36 and ICRF page).
+
+Remaining limitations / caveats:
+  - No numerical orbital elements, masses, altitudes, or space-weather values were supplied in the assessment; the answer is methodological/qualitative. No numerical inputs were invented.
+  - Gravity-field degree/order, drag model choice, and inclusion of third-body/SRP are presented as error-budget-driven decisions, not fixed values.
+  - The coordinate-transform discussion is conceptual (precession/nutation, ERA/GST, polar motion, EOP, UT1) and avoids standards memorization.
+  - Collision risk is discussed via covariance/Pc and combined hard-body radius; no specific numerical risk or miss-distance threshold is asserted.
+  - PDF produced via LibreOffice from HTML; no LaTeX/PDF engine was available in the environment.
